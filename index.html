@@ -234,7 +234,7 @@
 
     <div class="container">
       <div class="message-box-container">
-        <h2>You can send messages here</h2>
+        <h2>You can send messages here(for emergencies/urgent as well as normal texts...)</h2>
         <textarea 
           id="messageInput" 
           class="message-input" 
@@ -253,10 +253,6 @@
     </div>
 
     <script type="module">
-      // -----------------------------------------------------------
-      // Step 1: Import all required modules for Firebase
-      // We are using the V12 SDK with ES Modules (type="module")
-      // -----------------------------------------------------------
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
       import { 
         getFirestore, 
@@ -267,12 +263,6 @@
         onSnapshot, 
         serverTimestamp 
       } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-      // We don't need getAnalytics for this function, but you can keep it if you want.
-      // import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
-      
-      // -----------------------------------------------------------
-      // Step 2: Your unique Firebase configuration
-      // -----------------------------------------------------------
       const firebaseConfig = {
         apiKey: "AIzaSyD5_URrD1bFlfTftsr7a-Chj_TWituHi6k",
         authDomain: "hehe-f26d0.firebaseapp.com",
@@ -282,16 +272,10 @@
         appId: "1:985418504599:web:25e9b65e625318f1228cd2",
         measurementId: "G-T901ENE1L4"
       };
-
-      // -----------------------------------------------------------
-      // Step 3: Initialize Firebase App and Firestore
-      // -----------------------------------------------------------
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const messagesCollection = collection(db, "drishti_messages");
 
-
-      // Helper function for sparkle effect (same as original)
       function createSparkles(count) {
         for (let i = 0; i < count; i++) {
           setTimeout(() => {
@@ -306,24 +290,17 @@
           }, i * 100);
         }
       }
-
-      // -----------------------------------------------------------
-      // Step 4: Firebase Real-Time Listener (Reading Messages)
-      // -----------------------------------------------------------
       function setupMessageListener() {
         const messagesDisplay = document.getElementById('messagesDisplay');
         
-        // Create a query to get messages, ordered by time created (newest first)
         const q = query(messagesCollection, orderBy("createdAt", "desc"));
 
-        // Set up the real-time listener
         onSnapshot(q, (snapshot) => {
           messagesDisplay.innerHTML = ''; // Clear old messages
 
           snapshot.forEach((doc) => {
             const msgData = doc.data();
 
-            // Format Firestore ServerTimestamp for display
             let displayTimestamp = 'N/A';
             if (msgData.createdAt && msgData.createdAt.toDate) {
               displayTimestamp = msgData.createdAt.toDate().toLocaleString('en-US', {
@@ -343,24 +320,18 @@
             `;
             messagesDisplay.appendChild(messageDiv);
           });
-          // Scroll to the top of the messages display on load/update
           messagesDisplay.scrollTop = 0;
 
         }, (error) => {
           console.error("Error listening to messages:", error);
-          // Optional: Display an error message on the page if the listener fails
         });
       }
 
-      // -----------------------------------------------------------
-      // Step 5: Firebase Send Message Function (Writing Messages)
-      // -----------------------------------------------------------
       async function sendMessage() {
         const input = document.getElementById('messageInput');
         const message = input.value.trim();
 
         if (!message) {
-          // IMPORTANT: Do NOT use alert() in production/iframes. Using console.error instead.
           console.error('Validation Error: Please write a message first! 💫');
           return;
         }
@@ -368,30 +339,23 @@
         try {
           const messageData = {
             message: message,
-            // Use Firebase's server timestamp
             createdAt: serverTimestamp() 
           };
 
-          // Add a new document to the "drishti_messages" collection
           await addDoc(messagesCollection, messageData);
 
-          // Show success notification
           const notification = document.getElementById('successNotification');
           notification.classList.add('show');
           setTimeout(() => {
             notification.classList.remove('show');
           }, 2000);
 
-          // Clear input
           input.value = '';
 
-          // Create sparkles
           createSparkles(10);
-          // The real-time listener (onSnapshot) handles the display update automatically
 
         } catch (error) {
           console.error('Error sending message:', error);
-          // Display a user-friendly modal/message instead of alert()
           const notification = document.getElementById('successNotification');
           notification.textContent = '❌ Failed to send message! Check console.';
           notification.style.backgroundColor = 'rgba(255, 0, 0, 0.9)';
@@ -404,7 +368,6 @@
         }
       }
 
-      // Event Listeners and Initialization
       setupMessageListener();
 
       document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
@@ -416,7 +379,6 @@
         }
       });
 
-      // Create bubbles (same as original)
       const bubblesContainer = document.getElementById("bubbles");
       for (let i = 0; i < 15; i++) {
         const bubble = document.createElement("div");
