@@ -131,11 +131,81 @@
         background: radial-gradient(circle, rgba(150, 100, 255, 0.3), transparent);
       }
 
+      .minimize-button {
+        position: fixed;
+        top: 30px;
+        left: 30px;
+        background: rgba(168, 94, 234, 0.4);
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(168, 94, 234, 0.6);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        color: #ffffff;
+        font-size: 1.5em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 25px rgba(168, 94, 234, 0.4);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .minimize-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 35px rgba(168, 94, 234, 0.6);
+        background: rgba(168, 94, 234, 0.5);
+      }
+
+      .minimize-button:active {
+        transform: scale(0.95);
+      }
+
       .container {
         position: relative;
-        z-index: 1;
+        z-index: 10;
         max-width: 900px;
         width: 100%;
+        transition: all 0.5s ease;
+      }
+
+      .container.hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.95);
+      }
+
+      .calm-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: rgba(10, 20, 40, 0.9);
+        backdrop-filter: blur(30px);
+        border: 2px solid rgba(168, 94, 234, 0.6);
+        border-radius: 25px;
+        padding: 40px 60px;
+        color: #ffffff;
+        font-size: 1.4em;
+        font-weight: 400;
+        z-index: 10000;
+        box-shadow: 0 20px 60px rgba(168, 94, 234, 0.5);
+        transition: transform 0.5s ease;
+        text-align: center;
+        max-width: 600px;
+        line-height: 1.8;
+      }
+
+      .calm-message.show {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .calm-message::before {
+        content: ': )';
+        display: block;
+        font-size: 2em;
+        margin-bottom: 15px;
       }
 
       .message-box-container {
@@ -272,80 +342,6 @@
         will-change: transform, opacity;
       }
 
-      .minimize-button {
-        position: fixed;
-        top: 30px;
-        left: 30px;
-        background: rgba(168, 94, 234, 0.3);
-        backdrop-filter: blur(20px);
-        border: 2px solid rgba(168, 94, 234, 0.5);
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        color: #ffffff;
-        font-size: 1.5em;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 25px rgba(168, 94, 234, 0.4);
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .minimize-button:hover {
-        transform: scale(1.1);
-        box-shadow: 0 8px 35px rgba(168, 94, 234, 0.6);
-        background: rgba(168, 94, 234, 0.4);
-      }
-
-      .minimize-button:active {
-        transform: scale(0.95);
-      }
-
-      .container.hidden {
-        opacity: 0;
-        pointer-events: none;
-        transform: scale(0.95);
-        transition: all 0.5s ease;
-      }
-
-      .container {
-        transition: all 0.5s ease;
-      }
-
-      .calm-message {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0);
-        background: rgba(10, 20, 40, 0.9);
-        backdrop-filter: blur(30px);
-        border: 2px solid rgba(168, 94, 234, 0.6);
-        border-radius: 25px;
-        padding: 40px 60px;
-        color: #ffffff;
-        font-size: 1.4em;
-        font-weight: 400;
-        z-index: 10000;
-        box-shadow: 0 20px 60px rgba(168, 94, 234, 0.5);
-        transition: transform 0.5s ease;
-        text-align: center;
-        max-width: 600px;
-        line-height: 1.8;
-      }
-
-      .calm-message.show {
-        transform: translate(-50%, -50%) scale(1);
-      }
-
-      .calm-message::before {
-        content: '✨';
-        display: block;
-        font-size: 2em;
-        margin-bottom: 15px;
-      }
-
       @media (max-width: 768px) {
         .message-box-container {
           padding: 20px;
@@ -386,9 +382,16 @@
       <div class="nebula nebula-1"></div>
       <div class="nebula nebula-2"></div>
     </div>
-    <div class="bubbles" id="bubbles"></div>
 
-    <div class="container">
+    <button class="minimize-button" id="minimizeBtn" title="Toggle chat">
+      <span id="minimizeIcon">✖</span>
+    </button>
+
+    <div class="calm-message" id="calmMessage">
+      Let it calm your nerves and bring peace to your heart and mind, your majesty. You deserve this tranquilityyyy
+    </div>
+
+    <div class="container" id="chatContainer">
       <div class="message-box-container">
         <h2>You can send messages here(for emergencies/urgent as well as normal texts...)</h2>
         <textarea 
@@ -443,7 +446,6 @@
           const star = document.createElement('div');
           star.className = 'star';
           
-          // Random size
           const size = Math.random();
           if (size < 0.7) {
             star.classList.add('small');
@@ -453,7 +455,6 @@
             star.classList.add('large');
           }
 
-          // Some stars have color
           const colorChance = Math.random();
           if (colorChance < 0.05) {
             star.classList.add('blue');
@@ -461,11 +462,8 @@
             star.classList.add('orange');
           }
 
-          // Random position
           star.style.left = Math.random() * 100 + '%';
           star.style.top = Math.random() * 100 + '%';
-          
-          // Random animation duration and delay
           star.style.animationDuration = (Math.random() * 3 + 2) + 's';
           star.style.animationDelay = Math.random() * 5 + 's';
 
@@ -479,7 +477,6 @@
         const shootingStar = document.createElement('div');
         shootingStar.className = 'shooting-star';
         
-        // Random starting position (top or right side)
         shootingStar.style.left = Math.random() * 50 + 25 + '%';
         shootingStar.style.top = Math.random() * 30 + '%';
         
@@ -490,7 +487,6 @@
         }, 2000);
       }
 
-      // Trigger shooting stars randomly
       function startShootingStars() {
         setInterval(() => {
           if (Math.random() < 0.3) {
@@ -613,18 +609,15 @@
 
       minimizeBtn.addEventListener('click', () => {
         if (!isMinimized) {
-          // Hide chat
           chatContainer.classList.add('hidden');
           minimizeIcon.textContent = '💬';
           isMinimized = true;
 
-          // Show calm message
           calmMessage.classList.add('show');
           setTimeout(() => {
             calmMessage.classList.remove('show');
           }, 4000);
         } else {
-          // Show chat
           chatContainer.classList.remove('hidden');
           minimizeIcon.textContent = '✖';
           isMinimized = false;
