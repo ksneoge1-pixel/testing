@@ -131,43 +131,6 @@
         background: radial-gradient(circle, rgba(150, 100, 255, 0.3), transparent);
       }
 
-      .bubbles {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        pointer-events: none;
-      }
-
-      .bubble {
-        position: absolute;
-        bottom: -100px;
-        width: 40px;
-        height: 40px;
-        background: radial-gradient(
-          circle at 30% 30%,
-          rgba(255, 255, 255, 0.15),
-          rgba(255, 255, 255, 0.02)
-        );
-        border-radius: 50%;
-        opacity: 0.3;
-        animation: rise 15s infinite ease-in;
-      }
-
-      @keyframes rise {
-        0% {
-          bottom: -100px;
-          transform: translateX(0);
-        }
-        50% {
-          transform: translateX(100px);
-        }
-        100% {
-          bottom: 110vh;
-          transform: translateX(-100px);
-        }
-      }
-
       .container {
         position: relative;
         z-index: 1;
@@ -636,19 +599,6 @@
           sendMessage();
         }
       });
-
-      // Create bubbles
-      const bubblesContainer = document.getElementById("bubbles");
-      for (let i = 0; i < 15; i++) {
-        const bubble = document.createElement("div");
-        bubble.className = "bubble";
-        bubble.style.left = Math.random() * 100 + "%";
-        bubble.style.width = Math.random() * 60 + 20 + "px";
-        bubble.style.height = bubble.style.width;
-        bubble.style.animationDuration = Math.random() * 10 + 10 + "s";
-        bubble.style.animationDelay = Math.random() * 5 + "s";
-        bubblesContainer.appendChild(bubble);
-      }
 
       // Initialize stars
       createStars();
