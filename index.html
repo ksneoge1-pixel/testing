@@ -42,36 +42,73 @@
       }
 
       .star.small {
-        width: 1px;
-        height: 1px;
-        box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+        width: 1.5px;
+        height: 1.5px;
+        box-shadow: 0 0 4px rgba(255, 255, 255, 1);
+        cursor: pointer;
+        transition: all 0.3s ease;
       }
 
       .star.medium {
-        width: 2px;
-        height: 2px;
-        box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
+        width: 2.5px;
+        height: 2.5px;
+        box-shadow: 0 0 6px rgba(255, 255, 255, 1);
+        cursor: pointer;
+        transition: all 0.3s ease;
       }
 
       .star.large {
-        width: 3px;
-        height: 3px;
-        box-shadow: 0 0 6px rgba(255, 255, 255, 1);
+        width: 4px;
+        height: 4px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+        cursor: pointer;
+        transition: all 0.3s ease;
       }
 
       .star.blue {
         background: #a8d8ff;
-        box-shadow: 0 0 8px rgba(168, 216, 255, 0.9);
+        box-shadow: 0 0 12px rgba(168, 216, 255, 1);
       }
 
       .star.orange {
         background: #ffb366;
-        box-shadow: 0 0 8px rgba(255, 179, 102, 0.9);
+        box-shadow: 0 0 12px rgba(255, 179, 102, 1);
+      }
+
+      .star:hover {
+        transform: scale(2.5) !important;
+        box-shadow: 0 0 20px currentColor !important;
+        z-index: 1000;
+      }
+
+      .star.clicked {
+        animation: starBurst 0.6s ease-out;
+      }
+
+      @keyframes starBurst {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(3); opacity: 1; box-shadow: 0 0 30px currentColor; }
+        100% { transform: scale(1); opacity: 1; }
       }
 
       @keyframes twinkle {
-        0%, 100% { opacity: 0.3; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.2); }
+        0%, 100% { opacity: 0.5; transform: scale(1); }
+        25% { opacity: 0.8; transform: scale(1.3); }
+        50% { opacity: 1; transform: scale(1.5); }
+        75% { opacity: 0.8; transform: scale(1.3); }
+      }
+
+      @keyframes rippleEffect {
+        0% { 
+          width: 10px; 
+          height: 10px; 
+          opacity: 1; 
+        }
+        100% { 
+          width: 100px; 
+          height: 100px; 
+          opacity: 0; 
+        }
       }
 
       .shooting-star {
@@ -464,8 +501,33 @@
 
           star.style.left = Math.random() * 100 + '%';
           star.style.top = Math.random() * 100 + '%';
-          star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-          star.style.animationDelay = Math.random() * 5 + 's';
+          star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+          star.style.animationDelay = Math.random() * 3 + 's';
+
+          // Add click interaction
+          star.addEventListener('click', (e) => {
+            e.stopPropagation();
+            star.classList.add('clicked');
+            createSparkles(5);
+            
+            // Create a ripple effect
+            const ripple = document.createElement('div');
+            ripple.style.position = 'fixed';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            ripple.style.width = '10px';
+            ripple.style.height = '10px';
+            ripple.style.borderRadius = '50%';
+            ripple.style.border = '2px solid rgba(255, 255, 255, 0.8)';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.zIndex = '9999';
+            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.animation = 'rippleEffect 1s ease-out';
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 1000);
+            setTimeout(() => star.classList.remove('clicked'), 600);
+          });
 
           starfield.appendChild(star);
         }
