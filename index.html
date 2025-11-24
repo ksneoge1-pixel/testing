@@ -31,7 +31,11 @@
         width: 100%;
         height: 100%;
         z-index: 0;
-        background: radial-gradient(ellipse at center, #0a1628 0%, #000000 100%);
+        background: radial-gradient(
+          ellipse at center,
+          #0a1628 0%,
+          #000000 100%
+        );
       }
 
       .star {
@@ -91,40 +95,61 @@
       }
 
       @keyframes starBurst {
-        0% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(4); opacity: 1; box-shadow: 0 0 40px currentColor; }
-        100% { transform: scale(1); opacity: 1; }
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(4);
+          opacity: 1;
+          box-shadow: 0 0 40px currentColor;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       @keyframes twinkle {
-        0%, 100% { opacity: 0.4; }
-        20% { opacity: 0.7; }
-        40% { opacity: 0.95; }
-        60% { opacity: 1; }
-        80% { opacity: 0.85; }
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        20% {
+          opacity: 0.7;
+        }
+        40% {
+          opacity: 0.95;
+        }
+        60% {
+          opacity: 1;
+        }
+        80% {
+          opacity: 0.85;
+        }
       }
 
       @keyframes rippleEffect {
-        0% { 
-          width: 10px; 
-          height: 10px; 
-          opacity: 1; 
+        0% {
+          width: 10px;
+          height: 10px;
+          opacity: 1;
         }
-        100% { 
-          width: 150px; 
-          height: 150px; 
-          opacity: 0; 
+        100% {
+          width: 150px;
+          height: 150px;
+          opacity: 0;
         }
       }
 
       @keyframes sparkleFloat {
-        0% { 
-          transform: translateY(0) scale(1); 
-          opacity: 1; 
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
         }
-        100% { 
-          transform: translateY(-100px) scale(0); 
-          opacity: 0; 
+        100% {
+          transform: translateY(-100px) scale(0);
+          opacity: 0;
         }
       }
 
@@ -154,11 +179,15 @@
       }
 
       .shooting-star::before {
-        content: '';
+        content: "";
         position: absolute;
         width: 150px;
         height: 2px;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent);
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.9),
+          transparent
+        );
         transform: translateX(-150px) translateY(0);
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
       }
@@ -178,14 +207,22 @@
       .nebula-1 {
         top: 10%;
         right: 15%;
-        background: radial-gradient(circle, rgba(100, 150, 255, 0.5), transparent);
+        background: radial-gradient(
+          circle,
+          rgba(100, 150, 255, 0.5),
+          transparent
+        );
         animation: pulseNebula 8s ease-in-out infinite;
       }
 
       .nebula-2 {
         bottom: 20%;
         left: 10%;
-        background: radial-gradient(circle, rgba(150, 100, 255, 0.4), transparent);
+        background: radial-gradient(
+          circle,
+          rgba(150, 100, 255, 0.4),
+          transparent
+        );
         animation: pulseNebula 10s ease-in-out infinite reverse;
       }
 
@@ -193,13 +230,24 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: radial-gradient(circle, rgba(255, 100, 200, 0.3), transparent);
+        background: radial-gradient(
+          circle,
+          rgba(255, 100, 200, 0.3),
+          transparent
+        );
         animation: pulseNebula 12s ease-in-out infinite;
       }
 
       @keyframes pulseNebula {
-        0%, 100% { opacity: 0.15; transform: scale(1); }
-        50% { opacity: 0.25; transform: scale(1.1); }
+        0%,
+        100% {
+          opacity: 0.15;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.25;
+          transform: scale(1.1);
+        }
       }
 
       .minimize-button {
@@ -273,7 +321,7 @@
       }
 
       .calm-message::before {
-        content: ': )';
+        content: ": )";
         display: block;
         font-size: 2.5em;
         margin-bottom: 20px;
@@ -281,8 +329,13 @@
       }
 
       @keyframes gentleFloat {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
       }
 
       .message-box-container {
@@ -339,7 +392,11 @@
       }
 
       .send-button {
-        background: linear-gradient(135deg, rgba(168, 94, 234, 0.4), rgba(100, 200, 255, 0.4));
+        background: linear-gradient(
+          135deg,
+          rgba(168, 94, 234, 0.4),
+          rgba(100, 200, 255, 0.4)
+        );
         backdrop-filter: blur(20px);
         border: 2px solid rgba(168, 94, 234, 0.6);
         border-radius: 50px;
@@ -356,7 +413,7 @@
       }
 
       .send-button::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 50%;
@@ -376,7 +433,11 @@
       .send-button:hover {
         transform: scale(1.05);
         box-shadow: 0 12px 45px rgba(168, 94, 234, 0.6);
-        background: linear-gradient(135deg, rgba(168, 94, 234, 0.5), rgba(100, 200, 255, 0.5));
+        background: linear-gradient(
+          135deg,
+          rgba(168, 94, 234, 0.5),
+          rgba(100, 200, 255, 0.5)
+        );
       }
 
       .send-button:active {
@@ -538,15 +599,16 @@
     </button>
 
     <div class="calm-message" id="calmMessage">
-      Let it calm your nerves and bring peace to your heart and mind, your majesty. You deserve this tranquilityyyy
+      Let it calm your nerves and bring peace to your heart and mind, your
+      majesty. You deserve this tranquilityyyy
     </div>
 
     <div class="container" id="chatContainer">
       <div class="message-box-container">
         <h2>Welcome Back, Your Majesty :)</h2>
-        <textarea 
-          id="messageInput" 
-          class="message-input" 
+        <textarea
+          id="messageInput"
+          class="message-input"
           placeholder="Write here anytime, drishti. I’ll be here, listening, as if you’re the most beautiful song I know :)..."
         ></textarea>
         <button class="send-button" id="sendMessageBtn">
@@ -563,16 +625,16 @@
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-      import { 
-        getFirestore, 
-        collection, 
-        addDoc, 
-        query, 
-        orderBy, 
-        onSnapshot, 
-        serverTimestamp 
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        query,
+        orderBy,
+        onSnapshot,
+        serverTimestamp,
       } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-      
+
       const firebaseConfig = {
         apiKey: "AIzaSyD5_URrD1bFlfTftsr7a-Chj_TWituHi6k",
         authDomain: "hehe-f26d0.firebaseapp.com",
@@ -580,83 +642,168 @@
         storageBucket: "hehe-f26d0.firebasestorage.app",
         messagingSenderId: "985418504599",
         appId: "1:985418504599:web:25e9b65e625318f1228cd2",
-        measurementId: "G-T901ENE1L4"
+        measurementId: "G-T901ENE1L4",
       };
-      
+
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const messagesCollection = collection(db, "drishti_messages");
+      // Typing particle effect
+      function createTypingParticle(x, y) {
+        const particle = document.createElement("div");
+        particle.style.position = "fixed";
+        particle.style.left = x + "px";
+        particle.style.top = y + "px";
+        particle.style.width = Math.random() * 6 + 3 + "px";
+        particle.style.height = Math.random() * 6 + 3 + "px";
+        particle.style.borderRadius = "50%";
+        particle.style.pointerEvents = "none";
+        particle.style.zIndex = "9999";
+
+        // Random cosmic colors matching theme
+        const colors = [
+          "rgba(168, 216, 255, 0.9)", // blue
+          "rgba(168, 94, 234, 0.9)", // purple
+          "rgba(255, 179, 102, 0.9)", // orange
+          "rgba(216, 168, 255, 0.9)", // light purple
+          "rgba(100, 200, 255, 0.9)", // light blue
+          "rgba(255, 215, 100, 0.9)", // light orange
+        ];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.background = color;
+        particle.style.boxShadow = `0 0 ${Math.random() * 15 + 10}px ${color}`;
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 3 + 1;
+        const lifetime = Math.random() * 800 + 600;
+
+        document.body.appendChild(particle);
+
+        const startTime = Date.now();
+        const startX = x;
+        const startY = y;
+
+        function animate() {
+          const elapsed = Date.now() - startTime;
+          const progress = elapsed / lifetime;
+
+          if (progress >= 1) {
+            particle.remove();
+            return;
+          }
+
+          const currentX = startX + Math.cos(angle) * velocity * elapsed * 0.1;
+          const currentY =
+            startY - elapsed * 0.15 + Math.sin(elapsed * 0.01) * 10;
+          const opacity = 1 - progress;
+          const scale = 1 - progress * 0.5;
+
+          particle.style.left = currentX + "px";
+          particle.style.top = currentY + "px";
+          particle.style.opacity = opacity;
+          particle.style.transform = `scale(${scale})`;
+
+          requestAnimationFrame(animate);
+        }
+
+        animate();
+      }
+
+      let isTyping = false;
+      let typingInterval;
+
+      function startTypingEffect(textarea) {
+        if (isTyping) return;
+        isTyping = true;
+
+        typingInterval = setInterval(() => {
+          const rect = textarea.getBoundingClientRect();
+          // Create particles near the cursor position within textarea
+          const x = rect.left + Math.random() * rect.width;
+          const y = rect.top + Math.random() * 60; // Near top of textarea where typing happens
+
+          createTypingParticle(x, y);
+        }, 60);
+      }
+
+      function stopTypingEffect() {
+        isTyping = false;
+        if (typingInterval) {
+          clearInterval(typingInterval);
+          typingInterval = null;
+        }
+      }
 
       // Parallax stars array
       const stars = [];
-      const nebulas = document.querySelectorAll('.nebula');
+      const nebulas = document.querySelectorAll(".nebula");
 
       // Create starfield with parallax layers
       function createStars() {
-        const starfield = document.getElementById('starfield');
+        const starfield = document.getElementById("starfield");
         const starCount = 400;
 
         for (let i = 0; i < starCount; i++) {
-          const star = document.createElement('div');
-          star.className = 'star';
-          
+          const star = document.createElement("div");
+          star.className = "star";
+
           const size = Math.random();
           let depth;
-          
+
           if (size < 0.6) {
-            star.classList.add('small');
+            star.classList.add("small");
             depth = 0.3;
           } else if (size < 0.85) {
-            star.classList.add('medium');
+            star.classList.add("medium");
             depth = 1;
           } else {
-            star.classList.add('large');
+            star.classList.add("large");
             depth = 2;
           }
 
           const colorChance = Math.random();
           if (colorChance < 0.06) {
-            star.classList.add('blue');
-          } else if (colorChance < 0.10) {
-            star.classList.add('orange');
+            star.classList.add("blue");
+          } else if (colorChance < 0.1) {
+            star.classList.add("orange");
           } else if (colorChance < 0.13) {
-            star.classList.add('purple');
+            star.classList.add("purple");
           }
 
           const x = Math.random() * 100;
           const y = Math.random() * 100;
-          
-          star.style.left = x + '%';
-          star.style.top = y + '%';
-          star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-          star.style.animationDelay = Math.random() * 5 + 's';
+
+          star.style.left = x + "%";
+          star.style.top = y + "%";
+          star.style.animationDuration = Math.random() * 3 + 2 + "s";
+          star.style.animationDelay = Math.random() * 5 + "s";
 
           stars.push({
             element: star,
-            depth: depth
+            depth: depth,
           });
 
-          star.addEventListener('click', (e) => {
+          star.addEventListener("click", (e) => {
             e.stopPropagation();
-            star.classList.add('clicked');
+            star.classList.add("clicked");
             createSparkles(8, e.clientX, e.clientY);
-            
-            const ripple = document.createElement('div');
-            ripple.style.position = 'fixed';
-            ripple.style.left = e.clientX + 'px';
-            ripple.style.top = e.clientY + 'px';
-            ripple.style.width = '10px';
-            ripple.style.height = '10px';
-            ripple.style.borderRadius = '50%';
-            ripple.style.border = '3px solid rgba(255, 255, 255, 0.9)';
-            ripple.style.pointerEvents = 'none';
-            ripple.style.zIndex = '9999';
-            ripple.style.transform = 'translate(-50%, -50%)';
-            ripple.style.animation = 'rippleEffect 1.2s ease-out';
+
+            const ripple = document.createElement("div");
+            ripple.style.position = "fixed";
+            ripple.style.left = e.clientX + "px";
+            ripple.style.top = e.clientY + "px";
+            ripple.style.width = "10px";
+            ripple.style.height = "10px";
+            ripple.style.borderRadius = "50%";
+            ripple.style.border = "3px solid rgba(255, 255, 255, 0.9)";
+            ripple.style.pointerEvents = "none";
+            ripple.style.zIndex = "9999";
+            ripple.style.transform = "translate(-50%, -50%)";
+            ripple.style.animation = "rippleEffect 1.2s ease-out";
             document.body.appendChild(ripple);
-            
+
             setTimeout(() => ripple.remove(), 1200);
-            setTimeout(() => star.classList.remove('clicked'), 600);
+            setTimeout(() => star.classList.remove("clicked"), 600);
           });
 
           starfield.appendChild(star);
@@ -664,11 +811,11 @@
       }
 
       // Enhanced parallax effect
-      document.addEventListener('mousemove', (e) => {
+      document.addEventListener("mousemove", (e) => {
         const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
         const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
 
-        stars.forEach(star => {
+        stars.forEach((star) => {
           const moveX = mouseX * 60 * star.depth;
           const moveY = mouseY * 60 * star.depth;
           star.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
@@ -684,13 +831,13 @@
       });
 
       function createShootingStar() {
-        const starfield = document.getElementById('starfield');
-        const shootingStar = document.createElement('div');
-        shootingStar.className = 'shooting-star';
-        
-        shootingStar.style.left = Math.random() * 50 + 25 + '%';
-        shootingStar.style.top = Math.random() * 30 + '%';
-        
+        const starfield = document.getElementById("starfield");
+        const shootingStar = document.createElement("div");
+        shootingStar.className = "shooting-star";
+
+        shootingStar.style.left = Math.random() * 50 + 25 + "%";
+        shootingStar.style.top = Math.random() * 30 + "%";
+
         starfield.appendChild(shootingStar);
 
         setTimeout(() => {
@@ -709,12 +856,18 @@
       function createSparkles(count, x, y) {
         for (let i = 0; i < count; i++) {
           setTimeout(() => {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
+            const sparkle = document.createElement("div");
+            sparkle.className = "sparkle";
             const angle = (Math.PI * 2 * i) / count;
             const distance = 50 + Math.random() * 30;
-            sparkle.style.left = (x || Math.random() * window.innerWidth) + Math.cos(angle) * distance + 'px';
-            sparkle.style.top = (y || Math.random() * window.innerHeight) + Math.sin(angle) * distance + 'px';
+            sparkle.style.left =
+              (x || Math.random() * window.innerWidth) +
+              Math.cos(angle) * distance +
+              "px";
+            sparkle.style.top =
+              (y || Math.random() * window.innerHeight) +
+              Math.sin(angle) * distance +
+              "px";
             document.body.appendChild(sparkle);
 
             setTimeout(() => sparkle.remove(), 1500);
@@ -723,54 +876,59 @@
       }
 
       function setupMessageListener() {
-        const messagesDisplay = document.getElementById('messagesDisplay');
+        const messagesDisplay = document.getElementById("messagesDisplay");
         const q = query(messagesCollection, orderBy("createdAt", "desc"));
 
-        onSnapshot(q, (snapshot) => {
-          messagesDisplay.innerHTML = '';
+        onSnapshot(
+          q,
+          (snapshot) => {
+            messagesDisplay.innerHTML = "";
 
-          snapshot.forEach((doc) => {
-            const msgData = doc.data();
+            snapshot.forEach((doc) => {
+              const msgData = doc.data();
 
-            let displayTimestamp = 'N/A';
-            if (msgData.createdAt && msgData.createdAt.toDate) {
-              displayTimestamp = msgData.createdAt.toDate().toLocaleString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              });
-            }
+              let displayTimestamp = "N/A";
+              if (msgData.createdAt && msgData.createdAt.toDate) {
+                displayTimestamp = msgData.createdAt
+                  .toDate()
+                  .toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  });
+              }
 
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'single-message';
-            messageDiv.innerHTML = `
+              const messageDiv = document.createElement("div");
+              messageDiv.className = "single-message";
+              messageDiv.innerHTML = `
               <div class="message-timestamp">${displayTimestamp}</div>
               <div class="message-content">${msgData.message}</div>
             `;
-            messagesDisplay.appendChild(messageDiv);
-          });
-          messagesDisplay.scrollTop = 0;
-
-        }, (error) => {
-          console.error("Error listening to messages:", error);
-        });
+              messagesDisplay.appendChild(messageDiv);
+            });
+            messagesDisplay.scrollTop = 0;
+          },
+          (error) => {
+            console.error("Error listening to messages:", error);
+          }
+        );
       }
 
       async function sendMessage() {
-        const input = document.getElementById('messageInput');
+        const input = document.getElementById("messageInput");
         const message = input.value.trim();
 
         if (!message) {
-          const notification = document.getElementById('successNotification');
-          notification.textContent = '⚠️ Please write a message first!';
-          notification.style.background = 'rgba(255, 165, 0, 0.95)';
-          notification.classList.add('show');
+          const notification = document.getElementById("successNotification");
+          notification.textContent = "⚠️ Please write a message first!";
+          notification.style.background = "rgba(255, 165, 0, 0.95)";
+          notification.classList.add("show");
           setTimeout(() => {
-            notification.classList.remove('show');
-            notification.textContent = '✨ Message sent successfully! ✨';
-            notification.style.background = '';
+            notification.classList.remove("show");
+            notification.textContent = "✨ Message sent successfully! ✨";
+            notification.style.background = "";
           }, 2000);
           return;
         }
@@ -778,67 +936,95 @@
         try {
           const messageData = {
             message: message,
-            createdAt: serverTimestamp() 
+            createdAt: serverTimestamp(),
           };
 
           await addDoc(messagesCollection, messageData);
 
-          const notification = document.getElementById('successNotification');
-          notification.classList.add('show');
+          const notification = document.getElementById("successNotification");
+          notification.classList.add("show");
           setTimeout(() => {
-            notification.classList.remove('show');
+            notification.classList.remove("show");
           }, 2500);
 
-          input.value = '';
+          input.value = "";
           createSparkles(15);
-
         } catch (error) {
-          console.error('Error sending message:', error);
-          const notification = document.getElementById('successNotification');
-          notification.textContent = '❌ Failed to send message!';
-          notification.style.background = 'rgba(255, 0, 0, 0.95)';
-          notification.classList.add('show');
+          console.error("Error sending message:", error);
+          const notification = document.getElementById("successNotification");
+          notification.textContent = "❌ Failed to send message!";
+          notification.style.background = "rgba(255, 0, 0, 0.95)";
+          notification.classList.add("show");
           setTimeout(() => {
-            notification.classList.remove('show');
-            notification.textContent = '✨ Message sent successfully! ✨';
-            notification.style.background = '';
+            notification.classList.remove("show");
+            notification.textContent = "✨ Message sent successfully! ✨";
+            notification.style.background = "";
           }, 3000);
         }
       }
 
       setupMessageListener();
 
-      document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+      document
+        .getElementById("sendMessageBtn")
+        .addEventListener("click", sendMessage);
+      // Add typing particle effect to textarea
+      const messageInput = document.getElementById("messageInput");
 
-      document.getElementById('messageInput').addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          sendMessage();
+      messageInput.addEventListener("input", () => {
+        if (!isTyping) {
+          startTypingEffect(messageInput);
         }
       });
+
+      messageInput.addEventListener("focus", () => {
+        startTypingEffect(messageInput);
+      });
+
+      messageInput.addEventListener("blur", () => {
+        stopTypingEffect();
+      });
+
+      // Stop particles after 2 seconds of no typing
+      let typingTimeout;
+      messageInput.addEventListener("input", () => {
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+          stopTypingEffect();
+        }, 500);
+      });
+
+      document
+        .getElementById("messageInput")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+          }
+        });
 
       createStars();
       startShootingStars();
 
-      const minimizeBtn = document.getElementById('minimizeBtn');
-      const chatContainer = document.getElementById('chatContainer');
-      const calmMessage = document.getElementById('calmMessage');
-      const minimizeIcon = document.getElementById('minimizeIcon');
+      const minimizeBtn = document.getElementById("minimizeBtn");
+      const chatContainer = document.getElementById("chatContainer");
+      const calmMessage = document.getElementById("calmMessage");
+      const minimizeIcon = document.getElementById("minimizeIcon");
       let isMinimized = false;
 
-      minimizeBtn.addEventListener('click', () => {
+      minimizeBtn.addEventListener("click", () => {
         if (!isMinimized) {
-          chatContainer.classList.add('hidden');
-          minimizeIcon.textContent = '💬';
+          chatContainer.classList.add("hidden");
+          minimizeIcon.textContent = "💬";
           isMinimized = true;
 
-          calmMessage.classList.add('show');
+          calmMessage.classList.add("show");
           setTimeout(() => {
-            calmMessage.classList.remove('show');
+            calmMessage.classList.remove("show");
           }, 5000);
         } else {
-          chatContainer.classList.remove('hidden');
-          minimizeIcon.textContent = '✖';
+          chatContainer.classList.remove("hidden");
+          minimizeIcon.textContent = "✖";
           isMinimized = false;
         }
       });
