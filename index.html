@@ -586,6 +586,15 @@
         }
       }
     </style>
+    <audio id="sendSound" preload="auto">
+      <source src="../src/send.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="starClickSound" preload="auto">
+      <source src="../src/chime.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="ambientSound" loop preload="auto">
+      <source src="../src/backgroundAmbient.mp3" type="audio/mpeg" />
+    </audio>
   </head>
   <body>
     <div class="starfield" id="starfield">
@@ -605,11 +614,11 @@
 
     <div class="container" id="chatContainer">
       <div class="message-box-container">
-        <h2>Welcome Back, Your Majesty :)</h2>
+        <h2 id="greetingText">Welcome Back, Your Majesty :)</h2>
         <textarea
           id="messageInput"
           class="message-input"
-          placeholder="Write here anytime, drishti. I’ll be here, listening, like you’re the most beautiful song I know :)..."
+          placeholder="Write here anytime, drishti. I'll be here, listening, as if you're the most beautiful song I know :)..."
         ></textarea>
         <button class="send-button" id="sendMessageBtn">
           <span>Send Message ✨</span>
@@ -648,97 +657,30 @@
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const messagesCollection = collection(db, "drishti_messages");
-      // Typing particle effect
-      function createTypingParticle(x, y) {
-        const particle = document.createElement("div");
-        particle.style.position = "fixed";
-        particle.style.left = x + "px";
-        particle.style.top = y + "px";
-        particle.style.width = Math.random() * 6 + 3 + "px";
-        particle.style.height = Math.random() * 6 + 3 + "px";
-        particle.style.borderRadius = "50%";
-        particle.style.pointerEvents = "none";
-        particle.style.zIndex = "9999";
 
-        // Random cosmic colors matching theme
-        const colors = [
-          "rgba(168, 216, 255, 0.9)", // blue
-          "rgba(168, 94, 234, 0.9)", // purple
-          "rgba(255, 179, 102, 0.9)", // orange
-          "rgba(216, 168, 255, 0.9)", // light purple
-          "rgba(100, 200, 255, 0.9)", // light blue
-          "rgba(255, 215, 100, 0.9)", // light orange
-        ];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        particle.style.background = color;
-        particle.style.boxShadow = `0 0 ${Math.random() * 15 + 10}px ${color}`;
+      function updateGreeting() {
+        const greetingText = document.getElementById("greetingText");
+        const hour = new Date().getHours();
 
-        const angle = Math.random() * Math.PI * 2;
-        const velocity = Math.random() * 3 + 1;
-        const lifetime = Math.random() * 800 + 600;
-
-        document.body.appendChild(particle);
-
-        const startTime = Date.now();
-        const startX = x;
-        const startY = y;
-
-        function animate() {
-          const elapsed = Date.now() - startTime;
-          const progress = elapsed / lifetime;
-
-          if (progress >= 1) {
-            particle.remove();
-            return;
-          }
-
-          const currentX = startX + Math.cos(angle) * velocity * elapsed * 0.1;
-          const currentY =
-            startY - elapsed * 0.15 + Math.sin(elapsed * 0.01) * 10;
-          const opacity = 1 - progress;
-          const scale = 1 - progress * 0.5;
-
-          particle.style.left = currentX + "px";
-          particle.style.top = currentY + "px";
-          particle.style.opacity = opacity;
-          particle.style.transform = `scale(${scale})`;
-
-          requestAnimationFrame(animate);
+        let greeting;
+        if (hour >= 5 && hour < 12) {
+          greeting = "Good Morning, Your Majesty ☀️";
+        } else if (hour >= 12 && hour < 17) {
+          greeting = "Good Afternoon, Your Majesty 🌤️";
+        } else if (hour >= 17 && hour < 21) {
+          greeting = "Good Evening, Your Majesty 🌆";
+        } else {
+          greeting = "Good Night, Your Majesty 🌙";
         }
 
-        animate();
+        greetingText.textContent = greeting;
       }
 
-      let isTyping = false;
-      let typingInterval;
+      updateGreeting();
 
-      function startTypingEffect(textarea) {
-        if (isTyping) return;
-        isTyping = true;
-
-        typingInterval = setInterval(() => {
-          const rect = textarea.getBoundingClientRect();
-          // Create particles near the cursor position within textarea
-          const x = rect.left + Math.random() * rect.width;
-          const y = rect.top + Math.random() * 60; // Near top of textarea where typing happens
-
-          createTypingParticle(x, y);
-        }, 60);
-      }
-
-      function stopTypingEffect() {
-        isTyping = false;
-        if (typingInterval) {
-          clearInterval(typingInterval);
-          typingInterval = null;
-        }
-      }
-
-      // Parallax stars array
       const stars = [];
       const nebulas = document.querySelectorAll(".nebula");
 
-      // Create starfield with parallax layers
       function createStars() {
         const starfield = document.getElementById("starfield");
         const starCount = 400;
@@ -786,6 +728,10 @@
           star.addEventListener("click", (e) => {
             e.stopPropagation();
             star.classList.add("clicked");
+            document
+              .getElementById("starClickSound")
+              .play()
+              .catch(() => {});
             createSparkles(8, e.clientX, e.clientY);
 
             const ripple = document.createElement("div");
@@ -810,18 +756,10 @@
         }
       }
 
-      // Enhanced parallax effect
       document.addEventListener("mousemove", (e) => {
         const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
         const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
 
-        stars.forEach((star) => {
-          const moveX = mouseX * 60 * star.depth;
-          const moveY = mouseY * 60 * star.depth;
-          star.element.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        });
-
-        // Nebulas also respond to parallax
         nebulas.forEach((nebula, index) => {
           const depth = (index + 1) * 0.3;
           const moveX = mouseX * 30 * depth;
@@ -940,7 +878,10 @@
           };
 
           await addDoc(messagesCollection, messageData);
-
+          document
+            .getElementById("sendSound")
+            .play()
+            .catch(() => {});
           const notification = document.getElementById("successNotification");
           notification.classList.add("show");
           setTimeout(() => {
@@ -968,31 +909,6 @@
       document
         .getElementById("sendMessageBtn")
         .addEventListener("click", sendMessage);
-      // Add typing particle effect to textarea
-      const messageInput = document.getElementById("messageInput");
-
-      messageInput.addEventListener("input", () => {
-        if (!isTyping) {
-          startTypingEffect(messageInput);
-        }
-      });
-
-      messageInput.addEventListener("focus", () => {
-        startTypingEffect(messageInput);
-      });
-
-      messageInput.addEventListener("blur", () => {
-        stopTypingEffect();
-      });
-
-      // Stop particles after 2 seconds of no typing
-      let typingTimeout;
-      messageInput.addEventListener("input", () => {
-        clearTimeout(typingTimeout);
-        typingTimeout = setTimeout(() => {
-          stopTypingEffect();
-        }, 500);
-      });
 
       document
         .getElementById("messageInput")
@@ -1006,6 +922,15 @@
       createStars();
       startShootingStars();
 
+      document.body.addEventListener(
+        "click",
+        () => {
+          const ambientSound = document.getElementById("ambientSound");
+          ambientSound.volume = 0.5;
+          ambientSound.play().catch(() => {});
+        },
+        { once: true }
+      );
       const minimizeBtn = document.getElementById("minimizeBtn");
       const chatContainer = document.getElementById("chatContainer");
       const calmMessage = document.getElementById("calmMessage");
