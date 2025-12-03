@@ -485,6 +485,7 @@
         color: #ffffff;
         transition: all 0.3s ease;
         animation: messageSlideIn 0.4s ease-out;
+        position: relative;
       }
 
       @keyframes messageSlideIn {
@@ -516,6 +517,113 @@
         font-size: 1.12em;
         line-height: 1.7;
         word-wrap: break-word;
+      }
+
+      .edit-button {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(168, 94, 234, 0.3);
+        border: 1.5px solid rgba(168, 94, 234, 0.6);
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        opacity: 0;
+      }
+
+      .single-message:hover .edit-button {
+        opacity: 1;
+      }
+
+      .edit-button:hover {
+        background: rgba(168, 94, 234, 0.5);
+        border-color: rgba(168, 94, 234, 0.9);
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(168, 94, 234, 0.5);
+      }
+
+      .edit-button svg {
+        width: 16px;
+        height: 16px;
+        stroke: #ffffff;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .edit-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.15);
+        border: 2px solid rgba(168, 94, 234, 0.6);
+        border-radius: 10px;
+        padding: 12px;
+        color: #ffffff;
+        font-size: 1.12em;
+        font-family: "Georgia", serif;
+        resize: vertical;
+        min-height: 60px;
+        margin-top: 10px;
+      }
+
+      .edit-input:focus {
+        outline: none;
+        border-color: rgba(100, 200, 255, 0.8);
+        box-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+      }
+
+      .edit-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .save-edit-button,
+      .cancel-edit-button {
+        flex: 1;
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.95em;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-family: "Georgia", serif;
+      }
+
+      .save-edit-button {
+        background: linear-gradient(
+          135deg,
+          rgba(168, 94, 234, 0.6),
+          rgba(100, 200, 255, 0.6)
+        );
+        color: #ffffff;
+        border: 1.5px solid rgba(168, 94, 234, 0.8);
+      }
+
+      .save-edit-button:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(168, 94, 234, 0.8),
+          rgba(100, 200, 255, 0.8)
+        );
+        box-shadow: 0 5px 20px rgba(168, 94, 234, 0.5);
+      }
+
+      .cancel-edit-button {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        border: 1.5px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .cancel-edit-button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
       }
 
       .success-notification {
@@ -584,6 +692,10 @@
           padding: 35px 45px;
           max-width: 90%;
         }
+
+        .edit-button {
+          opacity: 1;
+        }
       }
     </style>
     <audio id="sendSound" preload="auto">
@@ -642,6 +754,8 @@
         orderBy,
         onSnapshot,
         serverTimestamp,
+        doc,
+        updateDoc,
       } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
       const firebaseConfig = {
@@ -813,6 +927,100 @@
         }
       }
 
+      function enterEditMode(messageDiv, docId, currentMessage) {
+        const messageContent = messageDiv.querySelector(".message-content");
+        const editButton = messageDiv.querySelector(".edit-button");
+
+        editButton.style.display = "none";
+
+        const originalContent = messageContent.innerHTML;
+
+        messageContent.innerHTML = `
+      <textarea class="edit-input">${currentMessage}</textarea>
+      <div class="edit-actions">
+        <button class="save-edit-button">Save ✨</button>
+        <button class="cancel-edit-button">Cancel</button>
+      </div>
+    `;
+
+        const editInput = messageContent.querySelector(".edit-input");
+        const saveButton = messageContent.querySelector(".save-edit-button");
+        const cancelButton = messageContent.querySelector(
+          ".cancel-edit-button"
+        );
+
+        editInput.focus();
+        editInput.setSelectionRange(
+          editInput.value.length,
+          editInput.value.length
+        );
+
+        saveButton.addEventListener("click", async () => {
+          const newMessage = editInput.value.trim();
+
+          if (!newMessage) {
+            showNotification(
+              "⚠️ Message cannot be empty!",
+              "rgba(255, 165, 0, 0.95)"
+            );
+            return;
+          }
+
+          if (newMessage === currentMessage) {
+            messageContent.innerHTML = originalContent;
+            editButton.style.display = "flex";
+            return;
+          }
+
+          try {
+            const messageDoc = doc(db, "drishti_messages", docId);
+            await updateDoc(messageDoc, {
+              message: newMessage,
+            });
+
+            showNotification(
+              "✨ Message updated successfully! ✨",
+              "rgba(5, 196, 107, 0.95)"
+            );
+            createSparkles(12);
+          } catch (error) {
+            console.error("Error updating message:", error);
+            showNotification(
+              "❌ Failed to update message!",
+              "rgba(255, 0, 0, 0.95)"
+            );
+            messageContent.innerHTML = originalContent;
+            editButton.style.display = "flex";
+          }
+        });
+
+        cancelButton.addEventListener("click", () => {
+          messageContent.innerHTML = originalContent;
+          editButton.style.display = "flex";
+        });
+
+        editInput.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            messageContent.innerHTML = originalContent;
+            editButton.style.display = "flex";
+          }
+        });
+      }
+
+      function showNotification(text, backgroundColor) {
+        const notification = document.getElementById("successNotification");
+        notification.textContent = text;
+        if (backgroundColor) {
+          notification.style.background = backgroundColor;
+        }
+        notification.classList.add("show");
+        setTimeout(() => {
+          notification.classList.remove("show");
+          notification.textContent = "✨ Message sent successfully! ✨";
+          notification.style.background = "";
+        }, 2500);
+      }
+
       function setupMessageListener() {
         const messagesDisplay = document.getElementById("messagesDisplay");
         const q = query(messagesCollection, orderBy("createdAt", "desc"));
@@ -822,8 +1030,9 @@
           (snapshot) => {
             messagesDisplay.innerHTML = "";
 
-            snapshot.forEach((doc) => {
-              const msgData = doc.data();
+            snapshot.forEach((docSnapshot) => {
+              const msgData = docSnapshot.data();
+              const docId = docSnapshot.id;
 
               let displayTimestamp = "N/A";
               if (msgData.createdAt && msgData.createdAt.toDate) {
@@ -841,9 +1050,22 @@
               const messageDiv = document.createElement("div");
               messageDiv.className = "single-message";
               messageDiv.innerHTML = `
-              <div class="message-timestamp">${displayTimestamp}</div>
-              <div class="message-content">${msgData.message}</div>
-            `;
+          <div class="message-timestamp">${displayTimestamp}</div>
+          <div class="message-content">${msgData.message}</div>
+          <button class="edit-button" title="Edit message">
+            <svg viewBox="0 0 24 24">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+          </button>
+        `;
+
+              const editButton = messageDiv.querySelector(".edit-button");
+              editButton.addEventListener("click", (e) => {
+                e.stopPropagation();
+                enterEditMode(messageDiv, docId, msgData.message);
+              });
+
               messagesDisplay.appendChild(messageDiv);
             });
             messagesDisplay.scrollTop = 0;
@@ -859,15 +1081,10 @@
         const message = input.value.trim();
 
         if (!message) {
-          const notification = document.getElementById("successNotification");
-          notification.textContent = "⚠️ Please write a message first!";
-          notification.style.background = "rgba(255, 165, 0, 0.95)";
-          notification.classList.add("show");
-          setTimeout(() => {
-            notification.classList.remove("show");
-            notification.textContent = "✨ Message sent successfully! ✨";
-            notification.style.background = "";
-          }, 2000);
+          showNotification(
+            "⚠️ Please write a message first!",
+            "rgba(255, 165, 0, 0.95)"
+          );
           return;
         }
 
@@ -882,25 +1099,19 @@
             .getElementById("sendSound")
             .play()
             .catch(() => {});
-          const notification = document.getElementById("successNotification");
-          notification.classList.add("show");
-          setTimeout(() => {
-            notification.classList.remove("show");
-          }, 2500);
+          showNotification(
+            "✨ Message sent successfully! ✨",
+            "rgba(5, 196, 107, 0.95)"
+          );
 
           input.value = "";
           createSparkles(15);
         } catch (error) {
           console.error("Error sending message:", error);
-          const notification = document.getElementById("successNotification");
-          notification.textContent = "❌ Failed to send message!";
-          notification.style.background = "rgba(255, 0, 0, 0.95)";
-          notification.classList.add("show");
-          setTimeout(() => {
-            notification.classList.remove("show");
-            notification.textContent = "✨ Message sent successfully! ✨";
-            notification.style.background = "";
-          }, 3000);
+          showNotification(
+            "❌ Failed to send message!",
+            "rgba(255, 0, 0, 0.95)"
+          );
         }
       }
 
