@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Our Little Galaxy :)</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
       * {
         margin: 0;
@@ -12,7 +16,7 @@
       }
 
       body {
-        font-family: "Georgia", serif;
+        font-family: "Montserrat", sans-serif;
         overflow-x: hidden;
         cursor: default;
         background: #000000;
@@ -38,95 +42,12 @@
         );
       }
 
-      .star {
+      #starfield-canvas {
         position: absolute;
-        background: white;
-        border-radius: 50%;
-        animation: twinkle linear infinite;
-        transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        will-change: transform;
-      }
-
-      .star.small {
-        width: 1.5px;
-        height: 1.5px;
-        box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
-        cursor: pointer;
-      }
-
-      .star.medium {
-        width: 2.5px;
-        height: 2.5px;
-        box-shadow: 0 0 6px rgba(255, 255, 255, 1);
-        cursor: pointer;
-      }
-
-      .star.large {
-        width: 4px;
-        height: 4px;
-        box-shadow: 0 0 10px rgba(255, 255, 255, 1);
-        cursor: pointer;
-      }
-
-      .star.blue {
-        background: #a8d8ff;
-        box-shadow: 0 0 12px rgba(168, 216, 255, 1);
-      }
-
-      .star.orange {
-        background: #ffb366;
-        box-shadow: 0 0 12px rgba(255, 179, 102, 1);
-      }
-
-      .star.purple {
-        background: #d8a8ff;
-        box-shadow: 0 0 12px rgba(216, 168, 255, 1);
-      }
-
-      .star:hover {
-        transform: scale(3) !important;
-        box-shadow: 0 0 25px currentColor !important;
-        z-index: 1000;
-        animation: none;
-      }
-
-      .star.clicked {
-        animation: starBurst 0.6s ease-out;
-      }
-
-      @keyframes starBurst {
-        0% {
-          transform: scale(1);
-          opacity: 1;
-        }
-        50% {
-          transform: scale(4);
-          opacity: 1;
-          box-shadow: 0 0 40px currentColor;
-        }
-        100% {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      @keyframes twinkle {
-        0%,
-        100% {
-          opacity: 0.4;
-        }
-        20% {
-          opacity: 0.7;
-        }
-        40% {
-          opacity: 0.95;
-        }
-        60% {
-          opacity: 1;
-        }
-        80% {
-          opacity: 0.85;
-        }
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
       }
 
       @keyframes rippleEffect {
@@ -865,14 +786,106 @@
           font-size: 1em;
         }
       }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes fadeInOut {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        20%,
+        80% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .whisper-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: rgba(255, 105, 180, 0.5);
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 105, 180, 0.7);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 5px 25px rgba(255, 105, 180, 0.5);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .whisper-button:hover {
+        transform: scale(1.15);
+        box-shadow: 0 10px 40px rgba(255, 105, 180, 0.7);
+        background: rgba(255, 105, 180, 0.7);
+      }
+
+      .whisper-button svg {
+        width: 28px;
+        height: 28px;
+        fill: #ffffff;
+        transition: transform 0.3s ease;
+      }
+
+      .whisper-button:hover svg {
+        transform: scale(1.1);
+      }
+
+      .whisper-pulse-animation {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        z-index: 10001;
+        pointer-events: none;
+        animation: pulse 1.5s ease-out forwards;
+        background: radial-gradient(circle, rgba(255, 105, 180, 0.6) 0%, rgba(255, 105, 180, 0) 70%);
+      }
+
+      @keyframes pulse {
+        0% {
+          width: 0;
+          height: 0;
+          opacity: 1;
+        }
+        100% {
+          width: 300vmax;
+          height: 300vmax;
+          opacity: 0;
+        }
+      }
     </style>
-    <audio id="sendSound" preload="auto">
+    <audio id="sendSound" preload="metadata">
       <source src="./src/send.mp3" type="audio/mpeg" />
     </audio>
-    <audio id="starClickSound" preload="auto">
+    <audio id="starClickSound" preload="metadata">
       <source src="./src/chime.mp3" type="audio/mpeg" />
     </audio>
-    <audio id="ambientSound" loop preload="auto">
+    <audio id="ambientSound" loop preload="metadata">
       <source src="./src/Cry.mp3" type="audio/mpeg" />
     </audio>
   </head>
@@ -899,6 +912,7 @@
     </div>
 
     <div class="starfield" id="starfield">
+      <canvas id="starfield-canvas"></canvas>
       <div class="nebula nebula-1"></div>
       <div class="nebula nebula-2"></div>
       <div class="nebula nebula-3"></div>
@@ -932,6 +946,7 @@
     <div class="success-notification" id="successNotification">
       ✨ Message sent successfully! ✨
     </div>
+
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
@@ -982,14 +997,16 @@
           minimizeBtn.style.display = "flex";
           passwordInput.value = "";
           passwordError.textContent = "";
-
+          // After password is correct:
+          triggerHaptic("success");
           // Start the page functionality
           initializePage();
         } else {
           passwordError.textContent = "❌ Incorrect password. Try again...";
           passwordInput.value = "";
           passwordInput.focus();
-
+          // In the else block where password is wrong:
+          triggerHaptic("error");
           // Add shake animation to input
           passwordInput.style.animation = "none";
           setTimeout(() => {
@@ -1009,12 +1026,104 @@
       // Focus on password input
       setTimeout(() => passwordInput.focus(), 100);
 
+        // Haptic Feedback Utility
+        function triggerHaptic(style = "medium") {
+          if ("vibrate" in navigator) {
+            switch (style) {
+              case "light":
+                navigator.vibrate(10);
+                break;
+              case "medium":
+                navigator.vibrate(20);
+                break;
+              case "heavy":
+                navigator.vibrate(40);
+                break;
+              case "success":
+                navigator.vibrate([10, 50, 10]);
+                break;
+              case "error":
+                navigator.vibrate([20, 20, 20]);
+                break;
+              case "double":
+                navigator.vibrate([20, 30, 20]);
+                break;
+              default:
+                navigator.vibrate(20);
+            }
+          }
+        }
+
       function initializePage() {
         updateGreeting();
-        createStars();
+        initStarfield();
+        animateStarfield();
         startShootingStars();
         setupMessageListener();
 
+        // Draft Auto-Save
+        const messageInput = document.getElementById("messageInput");
+        let autoSaveTimeout;
+
+        // Load saved draft on page load
+        const savedDraft = localStorage.getItem("messageDraft");
+        if (savedDraft) {
+          messageInput.value = savedDraft;
+          // Show subtle indicator
+          showDraftLoadedIndicator();
+        }
+
+        function showDraftLoadedIndicator() {
+          const indicator = document.createElement("div");
+          indicator.textContent = "📝 Draft restored";
+          indicator.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(100, 200, 255, 0.9);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 0.9em;
+    z-index: 10000;
+    animation: slideInRight 0.4s ease, fadeOut 0.3s ease 2.5s forwards;
+  `;
+          document.body.appendChild(indicator);
+          setTimeout(() => indicator.remove(), 3000);
+        }
+
+        messageInput.addEventListener("input", () => {
+          clearTimeout(autoSaveTimeout);
+
+          autoSaveTimeout = setTimeout(() => {
+            const draft = messageInput.value.trim();
+            if (draft) {
+              localStorage.setItem("messageDraft", draft);
+              showAutoSaveIndicator();
+            } else {
+              localStorage.removeItem("messageDraft");
+            }
+          }, 1000); // Save after 1 second of no typing
+        });
+
+        function showAutoSaveIndicator() {
+          const indicator = document.createElement("div");
+          indicator.textContent = "💾 Draft saved";
+          indicator.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(168, 94, 234, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    z-index: 10000;
+    animation: fadeInOut 1.5s ease;
+  `;
+          document.body.appendChild(indicator);
+          setTimeout(() => indicator.remove(), 1500);
+        }
         // Ambient sound on first click
         document.body.addEventListener(
           "click",
@@ -1045,94 +1154,195 @@
         greetingText.textContent = greeting;
       }
 
-      const stars = [];
       const nebulas = document.querySelectorAll(".nebula");
+      const starfieldCanvas = document.getElementById('starfield-canvas');
+      const ctx = starfieldCanvas.getContext('2d');
 
-      function createStars() {
-        const starfield = document.getElementById("starfield");
-        const starCount = 400;
+      let stars = [];
+      const starCount = 400;
 
-        for (let i = 0; i < starCount; i++) {
-          const star = document.createElement("div");
-          star.className = "star";
+      const mouse = {
+          x: 0,
+          y: 0
+      };
 
-          const size = Math.random();
-          let depth;
+      function initStarfield() {
+          starfieldCanvas.width = window.innerWidth;
+          starfieldCanvas.height = window.innerHeight;
 
-          if (size < 0.6) {
-            star.classList.add("small");
-            depth = 0.3;
-          } else if (size < 0.85) {
-            star.classList.add("medium");
-            depth = 1;
-          } else {
-            star.classList.add("large");
-            depth = 2;
+          stars = [];
+          for (let i = 0; i < starCount; i++) {
+              const size = Math.random();
+              let depth, radius;
+
+              if (size < 0.6) {
+                  depth = 0.3;
+                  radius = 1;
+              } else if (size < 0.85) {
+                  depth = 1;
+                  radius = 1.5;
+              } else {
+                  depth = 2;
+                  radius = 2.5;
+              }
+
+              let color = "rgba(255, 255, 255, 1)";
+              const colorChance = Math.random();
+              if (colorChance < 0.06) {
+                  color = "rgba(168, 216, 255, 1)"; // blue
+              } else if (colorChance < 0.1) {
+                  color = "rgba(255, 179, 102, 1)"; // orange
+              } else if (colorChance < 0.13) {
+                  color = "rgba(216, 168, 255, 1)"; // purple
+              }
+
+
+              stars.push({
+                  x: Math.random() * starfieldCanvas.width,
+                  y: Math.random() * starfieldCanvas.height,
+                  radius: radius,
+                  originalRadius: radius,
+                  depth: depth,
+                  color: color,
+                  opacity: 0.4 + Math.random() * 0.6,
+                  opacityDirection: Math.random() > 0.5 ? 1 : -1,
+                  isSun: false,
+              });
           }
 
-          const colorChance = Math.random();
-          if (colorChance < 0.06) {
-            star.classList.add("blue");
-          } else if (colorChance < 0.1) {
-            star.classList.add("orange");
-          } else if (colorChance < 0.13) {
-            star.classList.add("purple");
-          }
-
-          const x = Math.random() * 100;
-          const y = Math.random() * 100;
-
-          star.style.left = x + "%";
-          star.style.top = y + "%";
-          star.style.animationDuration = Math.random() * 3 + 2 + "s";
-          star.style.animationDelay = Math.random() * 5 + "s";
-
-          stars.push({
-            element: star,
-            depth: depth,
+          // Designate 1 or 2 stars as suns
+          const potentialSuns = stars.filter(s => s.depth === 2);
+          const suns = potentialSuns.slice(0, Math.min(2, potentialSuns.length)); 
+          suns.forEach(sun => {
+              sun.isSun = true;
+              sun.planets = [];
+              const planetCount = Math.floor(Math.random() * 2) + 2; // 2-3 planets
+              for (let j = 0; j < planetCount; j++) {
+                  sun.planets.push({
+                      orbitRadius: sun.radius * 3 + 15 + j * 15,
+                      angle: Math.random() * Math.PI * 2,
+                      speed: (0.005 + Math.random() * 0.01) * (j + 1) * 0.5,
+                      radius: 2 + Math.random() * 1,
+                      color: `hsl(${Math.random() * 360}, 70%, 70%)`
+                  });
+              }
           });
-
-          star.addEventListener("click", (e) => {
-            e.stopPropagation();
-            star.classList.add("clicked");
-            document
-              .getElementById("starClickSound")
-              .play()
-              .catch(() => {});
-            createSparkles(8, e.clientX, e.clientY);
-
-            const ripple = document.createElement("div");
-            ripple.style.position = "fixed";
-            ripple.style.left = e.clientX + "px";
-            ripple.style.top = e.clientY + "px";
-            ripple.style.width = "10px";
-            ripple.style.height = "10px";
-            ripple.style.borderRadius = "50%";
-            ripple.style.border = "3px solid rgba(255, 255, 255, 0.9)";
-            ripple.style.pointerEvents = "none";
-            ripple.style.zIndex = "9999";
-            ripple.style.transform = "translate(-50%, -50%)";
-            ripple.style.animation = "rippleEffect 1.2s ease-out";
-            document.body.appendChild(ripple);
-
-            setTimeout(() => ripple.remove(), 1200);
-            setTimeout(() => star.classList.remove("clicked"), 600);
-          });
-
-          starfield.appendChild(star);
-        }
       }
 
-      document.addEventListener("mousemove", (e) => {
-        const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-        const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      function animateStarfield() {
+          requestAnimationFrame(animateStarfield);
+          ctx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
 
-        nebulas.forEach((nebula, index) => {
-          const depth = (index + 1) * 0.3;
-          const moveX = mouseX * 30 * depth;
-          const moveY = mouseY * 30 * depth;
-          nebula.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        });
+          const mouseX = (mouse.x / window.innerWidth - 0.5) * 2;
+          const mouseY = (mouse.y / window.innerHeight - 0.5) * 2;
+
+          stars.forEach(star => {
+              // Twinkle effect
+              if (star.opacityDirection > 0) {
+                  star.opacity += 0.005;
+                  if (star.opacity >= 1) {
+                      star.opacityDirection = -1;
+                  }
+              } else {
+                  star.opacity -= 0.005;
+                  if (star.opacity <= 0.4) {
+                      star.opacityDirection = 1;
+                  }
+              }
+
+              // Parallax
+              const moveX = mouseX * 40 * star.depth;
+              const moveY = mouseY * 40 * star.depth;
+
+              // Hover effect
+              const dx = mouse.x - (star.x + moveX);
+              const dy = mouse.y - (star.y + moveY);
+              const distance = Math.sqrt(dx * dx + dy * dy);
+
+              if (distance < star.radius * 3) {
+                   star.radius = star.originalRadius * 3;
+              } else {
+                   star.radius = star.originalRadius;
+              }
+
+              // Draw star
+              ctx.beginPath();
+              ctx.arc(star.x + moveX, star.y + moveY, star.radius, 0, Math.PI * 2);
+              const starColor = star.color.substring(0, star.color.lastIndexOf(',')) + `, ${star.opacity})`;
+              ctx.fillStyle = starColor;
+              ctx.shadowColor = star.color;
+              ctx.shadowBlur = star.radius * 2;
+              ctx.fill();
+              ctx.shadowBlur = 0;
+
+              // Draw planets if it's a sun
+              if (star.isSun) {
+                  const sunX = star.x + moveX;
+                  const sunY = star.y + moveY;
+
+                  star.planets.forEach(planet => {
+                      planet.angle += planet.speed;
+                      
+                      const planetX = sunX + planet.orbitRadius * Math.cos(planet.angle);
+                      const planetY = sunY + planet.orbitRadius * Math.sin(planet.angle);
+
+                      // Draw orbit path
+                      ctx.beginPath();
+                      ctx.arc(sunX, sunY, planet.orbitRadius, 0, Math.PI * 2);
+                      ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+                      ctx.stroke();
+
+                      // Draw planet
+                      ctx.beginPath();
+                      ctx.arc(planetX, planetY, planet.radius, 0, Math.PI * 2);
+                      ctx.fillStyle = planet.color;
+                      ctx.fill();
+                  });
+              }
+          });
+
+          nebulas.forEach((nebula, index) => {
+              const depth = (index + 1) * 0.3;
+              const moveX = mouseX * 60 * depth;
+              const moveY = mouseY * 60 * depth;
+              nebula.style.transform = `translate(${moveX}px, ${moveY}px)`;
+          });
+      }
+
+      window.addEventListener('resize', initStarfield);
+      document.addEventListener("mousemove", (e) => {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+      });
+
+      starfieldCanvas.addEventListener('click', (e) => {
+          const clickX = e.clientX;
+          const clickY = e.clientY;
+
+          const mouseX = (clickX / window.innerWidth - 0.5) * 2;
+          const mouseY = (clickY / window.innerHeight - 0.5) * 2;
+
+          let clickedOnStar = false;
+          stars.forEach(star => {
+              if (clickedOnStar) return;
+
+              const moveX = mouseX * 40 * star.depth;
+              const moveY = mouseY * 40 * star.depth;
+
+              const dx = clickX - (star.x + moveX);
+              const dy = clickY - (star.y + moveY);
+              const distance = Math.sqrt(dx * dx + dy * dy);
+
+              if (distance < star.radius) {
+                  const starClickSound = document.getElementById("starClickSound");
+                  starClickSound.currentTime = 0;
+                  starClickSound.play().catch(() => {});
+                  clickedOnStar = true;
+                  
+                  // Visual feedback for the click
+                  star.opacity = 1;
+              }
+          });
       });
 
       function createShootingStar() {
@@ -1272,8 +1482,8 @@
           notification.textContent = "✨ Message sent successfully! ✨";
           notification.style.background = "";
         }, 2500);
+        localStorage.removeItem("messageDraft");
       }
-
       function setupMessageListener() {
         const messagesDisplay = document.getElementById("messagesDisplay");
         const q = query(messagesCollection, orderBy("createdAt", "desc"));
@@ -1316,6 +1526,7 @@
               const editButton = messageDiv.querySelector(".edit-button");
               editButton.addEventListener("click", (e) => {
                 e.stopPropagation();
+                triggerHaptic("medium");
                 enterEditMode(messageDiv, docId, msgData.message);
               });
 
@@ -1332,7 +1543,7 @@
       async function sendMessage() {
         const input = document.getElementById("messageInput");
         const message = input.value.trim();
-
+        triggerHaptic("success");
         if (!message) {
           showNotification(
             "⚠️ Please write a message first!",
