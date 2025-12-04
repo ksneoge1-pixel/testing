@@ -401,7 +401,7 @@
         background: rgba(255, 255, 255, 0.1);
         border-left: 4px solid rgba(168, 94, 234, 0.7);
         border-radius: 12px;
-        padding: 18px 22px;
+        padding: 20px 26px;
         margin-bottom: 18px;
         color: #ffffff;
         transition: all 0.3s ease;
@@ -477,6 +477,113 @@
         stroke-linecap: round;
         stroke-linejoin: round;
       }
+
+      /* Reactions */
+      .reactions-container {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .reaction-btn {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.06);
+        color: #ffffff;
+        padding: 6px 10px;
+        border-radius: 18px;
+        cursor: pointer;
+        font-size: 1em;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: transform 0.15s ease, background 0.2s;
+      }
+
+      .reaction-btn:hover {
+        transform: translateY(-3px) scale(1.03);
+        background: rgba(168,94,234,0.25);
+        border-color: rgba(168,94,234,0.4);
+      }
+
+      .reaction-count {
+        font-weight: 700;
+        font-size: 0.95em;
+        color: #b8e6ff;
+      }
+
+      /* Reaction trigger and overlay */
+      .reaction-trigger {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06);
+        color: #ffffff;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.2s;
+        z-index: 50;  
+      }
+
+      .reaction-trigger:hover {
+        transform: scale(1.05);
+        background: rgba(168,94,234,0.18);
+      }
+
+      .reaction-summary {
+        position: absolute;
+        left: 12px;
+        bottom: 12px;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        z-index: 40;
+      }
+
+      .summary-reaction {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.06);
+        padding: 4px 8px;
+        border-radius: 14px;
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 0.95em;
+      }
+
+      .reaction-overlay {
+        position: absolute;
+        bottom: 56px;
+        left: 12px;
+        display: flex;
+        gap: 8px;
+        background: rgba(10,20,40,0.95);
+        border: 1px solid rgba(168,94,234,0.45);
+        padding: 8px 10px;
+        border-radius: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        z-index: 60;
+      }
+
+      .overlay-emoji {
+        width: 44px;
+        height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25em;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: transform 0.12s ease;
+      }
+
+      .overlay-emoji:hover { transform: translateY(-6px) scale(1.06); }
 
       .edit-input {
         width: 100%;
@@ -960,6 +1067,8 @@
         serverTimestamp,
         doc,
         updateDoc,
+        increment,
+        deleteField,
       } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
       const firebaseConfig = {
         apiKey: "AIzaSyD5_URrD1bFlfTftsr7a-Chj_TWituHi6k",
@@ -974,6 +1083,17 @@
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
       const messagesCollection = collection(db, "drishti_messages");
+
+      // Persistent client id to identify this user locally
+      function getOrCreateUserId() {
+        let id = localStorage.getItem('drishti_userId');
+        if (!id) {
+          id = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+          localStorage.setItem('drishti_userId', id);
+        }
+        return id;
+      }
+      const USER_ID = getOrCreateUserId();
 
       // Password Protection
       const CORRECT_PASSWORD = "cry";
@@ -1521,6 +1641,8 @@
           <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
         </svg>
       </button>
+      <div class="reaction-summary"></div>
+      <button class="reaction-trigger" title="React">➕</button>
     `;
 
               const editButton = messageDiv.querySelector(".edit-button");
@@ -1529,6 +1651,92 @@
                 triggerHaptic("medium");
                 enterEditMode(messageDiv, docId, msgData.message);
               });
+
+              // Populate compact reaction summary (only show emojis with count > 0)
+              const summaryContainer = messageDiv.querySelector('.reaction-summary');
+              function renderSummary(reactions) {
+                summaryContainer.innerHTML = '';
+                if (!reactions) return;
+                Object.keys(reactions).forEach((key) => {
+                  const count = reactions[key] || 0;
+                  if (count > 0) {
+                    const span = document.createElement('div');
+                    span.className = 'summary-reaction';
+                    span.innerHTML = `${key} <strong style="margin-left:6px;color:#b8e6ff">${count}</strong>`;
+                    summaryContainer.appendChild(span);
+                  }
+                });
+              }
+
+              renderSummary(msgData.reactions);
+
+              // Reaction overlay behavior (WhatsApp/Instagram style)
+              const trigger = messageDiv.querySelector('.reaction-trigger');
+              let overlayEl = null;
+              const EMOJIS = ['❤️', '😆', '💌', '😬', '🥹'];
+
+              function closeOverlay() {
+                if (overlayEl && overlayEl.parentNode) overlayEl.remove();
+                overlayEl = null;
+                document.removeEventListener('click', outsideClickListener);
+              }
+
+              function outsideClickListener(e) {
+                if (!overlayEl) return;
+                if (!overlayEl.contains(e.target) && !trigger.contains(e.target)) closeOverlay();
+              }
+
+              trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // toggle
+                if (overlayEl) return closeOverlay();
+
+                overlayEl = document.createElement('div');
+                overlayEl.className = 'reaction-overlay';
+
+                EMOJIS.forEach((emoji) => {
+                  const btn = document.createElement('div');
+                  btn.className = 'overlay-emoji';
+                  btn.textContent = emoji;
+                  btn.addEventListener('click', async (ev) => {
+                    ev.stopPropagation();
+                    const messageDoc = doc(db, 'drishti_messages', docId);
+                    try {
+                      // enforce single reaction per USER_ID
+                      const prior = (msgData.reactionsByUser && msgData.reactionsByUser[USER_ID]) || null;
+                      const updates = {};
+                      if (prior === emoji) {
+                        // user clicked same emoji -> remove reaction
+                        updates['reactions.' + emoji] = increment(-1);
+                        updates['reactionsByUser.' + USER_ID] = deleteField();
+                      } else if (prior) {
+                        // user had another reaction -> switch
+                        updates['reactions.' + emoji] = increment(1);
+                        updates['reactions.' + prior] = increment(-1);
+                        updates['reactionsByUser.' + USER_ID] = emoji;
+                      } else {
+                        // new reaction
+                        updates['reactions.' + emoji] = increment(1);
+                        updates['reactionsByUser.' + USER_ID] = emoji;
+                      }
+
+                      triggerHaptic('light');
+                      await updateDoc(messageDoc, updates);
+                      closeOverlay();
+                    } catch (err) {
+                      console.error('Error updating reaction:', err);
+                    }
+                  });
+                  overlayEl.appendChild(btn);
+                });
+
+                messageDiv.appendChild(overlayEl);
+                // close when clicking elsewhere
+                setTimeout(() => document.addEventListener('click', outsideClickListener), 10);
+              });
+
+              // Keep the UI updated when snapshot provides new data
+              // (onSnapshot re-renders messages, so renderSummary will run again)
 
               messagesDisplay.appendChild(messageDiv);
             });
@@ -1553,10 +1761,12 @@
         }
 
         try {
-          const messageData = {
-            message: message,
-            createdAt: serverTimestamp(),
-          };
+            const messageData = {
+              message: message,
+              createdAt: serverTimestamp(),
+              reactions: {},
+              reactionsByUser: {},
+            };
 
           await addDoc(messagesCollection, messageData);
           document
