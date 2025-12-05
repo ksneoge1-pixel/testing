@@ -4,10 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Our Little Galaxy :)</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
       * {
         margin: 0;
@@ -312,6 +318,97 @@
         color: rgba(255, 255, 255, 0.6);
       }
 
+      .input-controls {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 25px;
+      }
+
+      .image-upload-button {
+        background: linear-gradient(
+          135deg,
+          rgba(100, 200, 255, 0.4),
+          rgba(168, 94, 234, 0.4)
+        );
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(100, 200, 255, 0.6);
+        border-radius: 50px;
+        padding: 18px 18px;
+        color: #ffffff;
+        font-size: 1.25em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 8px 30px rgba(100, 200, 255, 0.4);
+        position: relative;
+        overflow: hidden;
+        flex: 0 0 auto;
+      }
+
+      .image-upload-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 45px rgba(100, 200, 255, 0.6);
+        background: linear-gradient(
+          135deg,
+          rgba(100, 200, 255, 0.5),
+          rgba(168, 94, 234, 0.5)
+        );
+      }
+
+      .image-upload-button:active {
+        transform: scale(0.95);
+      }
+
+      #imageInput {
+        display: none;
+      }
+
+      .image-preview-container {
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .image-preview {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid rgba(168, 94, 234, 0.5);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .remove-image {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 0, 0, 0.8);
+        border: none;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        color: white;
+        font-size: 1.2em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .remove-image:hover {
+        background: rgba(255, 0, 0, 1);
+        transform: scale(1.1);
+      }
+
       .send-button {
         background: linear-gradient(
           135deg,
@@ -328,7 +425,7 @@
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         box-shadow: 0 8px 30px rgba(168, 94, 234, 0.4);
-        width: 100%;
+        flex: 1;
         position: relative;
         overflow: hidden;
       }
@@ -347,7 +444,7 @@
       }
 
       .send-button:hover::before {
-        width: 300px;
+        width: 800px;
         height: 300px;
       }
 
@@ -440,6 +537,75 @@
         word-wrap: break-word;
       }
 
+      .message-images {
+        margin-top: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .message-image {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        border: 2px solid rgba(168, 94, 234, 0.4);
+      }
+
+      .message-image:hover {
+        transform: scale(1.05);
+        border-color: rgba(168, 94, 234, 0.8);
+      }
+
+      .image-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 10001;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .image-modal.show {
+        display: flex;
+      }
+
+      .image-modal img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+        box-shadow: 0 10px 50px rgba(168, 94, 234, 0.6);
+      }
+
+      .image-modal-close {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        color: white;
+        font-size: 1.5em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .image-modal-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+      }
+
       .edit-button {
         position: absolute;
         top: 15px;
@@ -478,7 +644,6 @@
         stroke-linejoin: round;
       }
 
-      /* Reactions */
       .reactions-container {
         margin-top: 12px;
         display: flex;
@@ -487,8 +652,8 @@
       }
 
       .reaction-btn {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         color: #ffffff;
         padding: 6px 10px;
         border-radius: 18px;
@@ -502,8 +667,8 @@
 
       .reaction-btn:hover {
         transform: translateY(-3px) scale(1.03);
-        background: rgba(168,94,234,0.25);
-        border-color: rgba(168,94,234,0.4);
+        background: rgba(168, 94, 234, 0.25);
+        border-color: rgba(168, 94, 234, 0.4);
       }
 
       .reaction-count {
@@ -512,13 +677,12 @@
         color: #b8e6ff;
       }
 
-      /* Reaction trigger and overlay */
       .reaction-trigger {
         position: absolute;
         right: 12px;
         bottom: 12px;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         color: #ffffff;
         width: 36px;
         height: 36px;
@@ -528,12 +692,12 @@
         justify-content: center;
         cursor: pointer;
         transition: transform 0.15s ease, background 0.2s;
-        z-index: 50;  
+        z-index: 50;
       }
 
       .reaction-trigger:hover {
         transform: scale(1.05);
-        background: rgba(168,94,234,0.18);
+        background: rgba(168, 94, 234, 0.18);
       }
 
       .reaction-summary {
@@ -547,8 +711,8 @@
       }
 
       .summary-reaction {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         padding: 4px 8px;
         border-radius: 14px;
         display: inline-flex;
@@ -563,11 +727,11 @@
         left: 12px;
         display: flex;
         gap: 8px;
-        background: rgba(10,20,40,0.95);
-        border: 1px solid rgba(168,94,234,0.45);
+        background: rgba(10, 20, 40, 0.95);
+        border: 1px solid rgba(168, 94, 234, 0.45);
         padding: 8px 10px;
         border-radius: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         z-index: 60;
       }
 
@@ -583,7 +747,9 @@
         transition: transform 0.12s ease;
       }
 
-      .overlay-emoji:hover { transform: translateY(-6px) scale(1.06); }
+      .overlay-emoji:hover {
+        transform: translateY(-6px) scale(1.06);
+      }
 
       .edit-input {
         width: 100%;
@@ -688,7 +854,6 @@
         animation: sparkleFloat 1.5s ease-out forwards;
       }
 
-      /* Password Modal Styles */
       .password-modal {
         position: fixed;
         top: 0;
@@ -863,6 +1028,11 @@
           padding: 15px 35px;
         }
 
+        .image-upload-button {
+          font-size: 1.1em;
+          padding: 15px 25px;
+        }
+
         .minimize-button {
           top: 20px;
           left: 20px;
@@ -891,6 +1061,10 @@
 
         .password-modal p {
           font-size: 1em;
+        }
+
+        .input-controls {
+          flex-direction: column;
         }
       }
 
@@ -970,7 +1144,11 @@
         z-index: 10001;
         pointer-events: none;
         animation: pulse 1.5s ease-out forwards;
-        background: radial-gradient(circle, rgba(255, 105, 180, 0.6) 0%, rgba(255, 105, 180, 0) 70%);
+        background: radial-gradient(
+          circle,
+          rgba(255, 105, 180, 0.6) 0%,
+          rgba(255, 105, 180, 0) 70%
+        );
       }
 
       @keyframes pulse {
@@ -984,6 +1162,27 @@
           height: 300vmax;
           opacity: 0;
         }
+      }
+
+      .uploading-indicator {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(10, 20, 40, 0.95);
+        backdrop-filter: blur(40px);
+        border: 2px solid rgba(168, 94, 234, 0.7);
+        border-radius: 25px;
+        padding: 30px 50px;
+        color: #ffffff;
+        font-size: 1.3em;
+        z-index: 10000;
+        box-shadow: 0 20px 60px rgba(168, 94, 234, 0.6);
+        display: none;
+      }
+
+      .uploading-indicator.show {
+        display: block;
       }
     </style>
     <audio id="sendSound" preload="metadata">
@@ -1042,9 +1241,18 @@
           class="message-input"
           placeholder="Write here anytime, drishti. I'll be here, listening, as if you're the most beautiful song I know :)..."
         ></textarea>
-        <button class="send-button" id="sendMessageBtn">
-          <span>Send Message ✨</span>
-        </button>
+
+        <div class="image-preview-container" id="imagePreviewContainer"></div>
+
+        <div class="input-controls">
+          <button class="send-button" id="sendMessageBtn">
+            <span>Send Message ✨</span>
+          </button>
+          <label for="imageInput" class="image-upload-button">
+            <span>📷</span>
+          </label>
+          <input type="file" id="imageInput" accept="image/*" multiple />
+        </div>
 
         <div class="messages-display" id="messagesDisplay"></div>
       </div>
@@ -1054,6 +1262,14 @@
       ✨ Message sent successfully! ✨
     </div>
 
+    <div class="uploading-indicator" id="uploadingIndicator">
+      ⏳ Uploading images...
+    </div>
+
+    <div class="image-modal" id="imageModal">
+      <button class="image-modal-close" id="imageModalClose">✖</button>
+      <img id="imageModalImg" src="" alt="Full size image" />
+    </div>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
@@ -1070,6 +1286,13 @@
         increment,
         deleteField,
       } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+      import {
+        getStorage,
+        ref,
+        uploadBytes,
+        getDownloadURL,
+      } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-storage.js";
+
       const firebaseConfig = {
         apiKey: "AIzaSyD5_URrD1bFlfTftsr7a-Chj_TWituHi6k",
         authDomain: "hehe-f26d0.firebaseapp.com",
@@ -1082,20 +1305,21 @@
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
+      const storage = getStorage(app);
       const messagesCollection = collection(db, "drishti_messages");
 
-      // Persistent client id to identify this user locally
+      let selectedImages = [];
+
       function getOrCreateUserId() {
-        let id = localStorage.getItem('drishti_userId');
+        let id = localStorage.getItem("drishti_userId");
         if (!id) {
-          id = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
-          localStorage.setItem('drishti_userId', id);
+          id = "u_" + Date.now() + "_" + Math.random().toString(36).slice(2, 9);
+          localStorage.setItem("drishti_userId", id);
         }
         return id;
       }
       const USER_ID = getOrCreateUserId();
 
-      // Password Protection
       const CORRECT_PASSWORD = "cry";
       const passwordModal = document.getElementById("passwordModal");
       const passwordInput = document.getElementById("passwordInput");
@@ -1104,7 +1328,6 @@
       const chatContainer = document.getElementById("chatContainer");
       const minimizeBtn = document.getElementById("minimizeBtn");
 
-      // Hide main content initially
       chatContainer.style.display = "none";
       minimizeBtn.style.display = "none";
 
@@ -1117,17 +1340,13 @@
           minimizeBtn.style.display = "flex";
           passwordInput.value = "";
           passwordError.textContent = "";
-          // After password is correct:
           triggerHaptic("success");
-          // Start the page functionality
           initializePage();
         } else {
           passwordError.textContent = "❌ Incorrect password. Try again...";
           passwordInput.value = "";
           passwordInput.focus();
-          // In the else block where password is wrong:
           triggerHaptic("error");
-          // Add shake animation to input
           passwordInput.style.animation = "none";
           setTimeout(() => {
             passwordInput.style.animation = "shake 0.5s ease";
@@ -1143,36 +1362,34 @@
         }
       });
 
-      // Focus on password input
       setTimeout(() => passwordInput.focus(), 100);
 
-        // Haptic Feedback Utility
-        function triggerHaptic(style = "medium") {
-          if ("vibrate" in navigator) {
-            switch (style) {
-              case "light":
-                navigator.vibrate(10);
-                break;
-              case "medium":
-                navigator.vibrate(20);
-                break;
-              case "heavy":
-                navigator.vibrate(40);
-                break;
-              case "success":
-                navigator.vibrate([10, 50, 10]);
-                break;
-              case "error":
-                navigator.vibrate([20, 20, 20]);
-                break;
-              case "double":
-                navigator.vibrate([20, 30, 20]);
-                break;
-              default:
-                navigator.vibrate(20);
-            }
+      function triggerHaptic(style = "medium") {
+        if ("vibrate" in navigator) {
+          switch (style) {
+            case "light":
+              navigator.vibrate(10);
+              break;
+            case "medium":
+              navigator.vibrate(20);
+              break;
+            case "heavy":
+              navigator.vibrate(40);
+              break;
+            case "success":
+              navigator.vibrate([10, 50, 10]);
+              break;
+            case "error":
+              navigator.vibrate([20, 20, 20]);
+              break;
+            case "double":
+              navigator.vibrate([20, 30, 20]);
+              break;
+            default:
+              navigator.vibrate(20);
           }
         }
+      }
 
       function initializePage() {
         updateGreeting();
@@ -1180,16 +1397,14 @@
         animateStarfield();
         startShootingStars();
         setupMessageListener();
+        setupImageHandling();
 
-        // Draft Auto-Save
         const messageInput = document.getElementById("messageInput");
         let autoSaveTimeout;
 
-        // Load saved draft on page load
         const savedDraft = localStorage.getItem("messageDraft");
         if (savedDraft) {
           messageInput.value = savedDraft;
-          // Show subtle indicator
           showDraftLoadedIndicator();
         }
 
@@ -1223,7 +1438,7 @@
             } else {
               localStorage.removeItem("messageDraft");
             }
-          }, 1000); // Save after 1 second of no typing
+          }, 1000);
         });
 
         function showAutoSaveIndicator() {
@@ -1244,7 +1459,7 @@
           document.body.appendChild(indicator);
           setTimeout(() => indicator.remove(), 1500);
         }
-        // Ambient sound on first click
+
         document.body.addEventListener(
           "click",
           () => {
@@ -1254,6 +1469,79 @@
           },
           { once: true }
         );
+      }
+
+      function setupImageHandling() {
+        const imageInput = document.getElementById("imageInput");
+        const imagePreviewContainer = document.getElementById(
+          "imagePreviewContainer"
+        );
+
+        imageInput.addEventListener("change", (e) => {
+          const files = Array.from(e.target.files);
+
+          files.forEach((file) => {
+            if (file && file.type.startsWith("image/")) {
+              const reader = new FileReader();
+
+              reader.onload = (event) => {
+                selectedImages.push({
+                  file: file,
+                  dataUrl: event.target.result,
+                });
+
+                renderImagePreviews();
+              };
+
+              reader.readAsDataURL(file);
+            }
+          });
+
+          imageInput.value = "";
+        });
+
+        function renderImagePreviews() {
+          imagePreviewContainer.innerHTML = "";
+
+          selectedImages.forEach((img, index) => {
+            const previewDiv = document.createElement("div");
+            previewDiv.className = "image-preview";
+
+            const imgElement = document.createElement("img");
+            imgElement.src = img.dataUrl;
+
+            const removeBtn = document.createElement("button");
+            removeBtn.className = "remove-image";
+            removeBtn.textContent = "✖";
+            removeBtn.onclick = () => {
+              selectedImages.splice(index, 1);
+              renderImagePreviews();
+            };
+
+            previewDiv.appendChild(imgElement);
+            previewDiv.appendChild(removeBtn);
+            imagePreviewContainer.appendChild(previewDiv);
+          });
+        }
+
+        const imageModal = document.getElementById("imageModal");
+        const imageModalImg = document.getElementById("imageModalImg");
+        const imageModalClose = document.getElementById("imageModalClose");
+
+        imageModalClose.addEventListener("click", () => {
+          imageModal.classList.remove("show");
+        });
+
+        imageModal.addEventListener("click", (e) => {
+          if (e.target === imageModal) {
+            imageModal.classList.remove("show");
+          }
+        });
+
+        window.openImageModal = (src) => {
+          imageModalImg.src = src;
+          imageModal.classList.add("show");
+        };
       }
 
       function updateGreeting() {
@@ -1275,194 +1563,188 @@
       }
 
       const nebulas = document.querySelectorAll(".nebula");
-      const starfieldCanvas = document.getElementById('starfield-canvas');
-      const ctx = starfieldCanvas.getContext('2d');
+      const starfieldCanvas = document.getElementById("starfield-canvas");
+      const ctx = starfieldCanvas.getContext("2d");
 
       let stars = [];
       const starCount = 400;
 
       const mouse = {
-          x: 0,
-          y: 0
+        x: 0,
+        y: 0,
       };
 
       function initStarfield() {
-          starfieldCanvas.width = window.innerWidth;
-          starfieldCanvas.height = window.innerHeight;
+        starfieldCanvas.width = window.innerWidth;
+        starfieldCanvas.height = window.innerHeight;
 
-          stars = [];
-          for (let i = 0; i < starCount; i++) {
-              const size = Math.random();
-              let depth, radius;
+        stars = [];
+        for (let i = 0; i < starCount; i++) {
+          const size = Math.random();
+          let depth, radius;
 
-              if (size < 0.6) {
-                  depth = 0.3;
-                  radius = 1;
-              } else if (size < 0.85) {
-                  depth = 1;
-                  radius = 1.5;
-              } else {
-                  depth = 2;
-                  radius = 2.5;
-              }
-
-              let color = "rgba(255, 255, 255, 1)";
-              const colorChance = Math.random();
-              if (colorChance < 0.06) {
-                  color = "rgba(168, 216, 255, 1)"; // blue
-              } else if (colorChance < 0.1) {
-                  color = "rgba(255, 179, 102, 1)"; // orange
-              } else if (colorChance < 0.13) {
-                  color = "rgba(216, 168, 255, 1)"; // purple
-              }
-
-
-              stars.push({
-                  x: Math.random() * starfieldCanvas.width,
-                  y: Math.random() * starfieldCanvas.height,
-                  radius: radius,
-                  originalRadius: radius,
-                  depth: depth,
-                  color: color,
-                  opacity: 0.4 + Math.random() * 0.6,
-                  opacityDirection: Math.random() > 0.5 ? 1 : -1,
-                  isSun: false,
-              });
+          if (size < 0.6) {
+            depth = 0.3;
+            radius = 1;
+          } else if (size < 0.85) {
+            depth = 1;
+            radius = 1.5;
+          } else {
+            depth = 2;
+            radius = 2.5;
           }
 
-          // Designate 1 or 2 stars as suns
-          const potentialSuns = stars.filter(s => s.depth === 2);
-          const suns = potentialSuns.slice(0, Math.min(2, potentialSuns.length)); 
-          suns.forEach(sun => {
-              sun.isSun = true;
-              sun.planets = [];
-              const planetCount = Math.floor(Math.random() * 2) + 2; // 2-3 planets
-              for (let j = 0; j < planetCount; j++) {
-                  sun.planets.push({
-                      orbitRadius: sun.radius * 3 + 15 + j * 15,
-                      angle: Math.random() * Math.PI * 2,
-                      speed: (0.005 + Math.random() * 0.01) * (j + 1) * 0.5,
-                      radius: 2 + Math.random() * 1,
-                      color: `hsl(${Math.random() * 360}, 70%, 70%)`
-                  });
-              }
+          let color = "rgba(255, 255, 255, 1)";
+          const colorChance = Math.random();
+          if (colorChance < 0.06) {
+            color = "rgba(168, 216, 255, 1)";
+          } else if (colorChance < 0.1) {
+            color = "rgba(255, 179, 102, 1)";
+          } else if (colorChance < 0.13) {
+            color = "rgba(216, 168, 255, 1)";
+          }
+
+          stars.push({
+            x: Math.random() * starfieldCanvas.width,
+            y: Math.random() * starfieldCanvas.height,
+            radius: radius,
+            originalRadius: radius,
+            depth: depth,
+            color: color,
+            opacity: 0.4 + Math.random() * 0.6,
+            opacityDirection: Math.random() > 0.5 ? 1 : -1,
+            isSun: false,
           });
+        }
+
+        const potentialSuns = stars.filter((s) => s.depth === 2);
+        const suns = potentialSuns.slice(0, Math.min(2, potentialSuns.length));
+        suns.forEach((sun) => {
+          sun.isSun = true;
+          sun.planets = [];
+          const planetCount = Math.floor(Math.random() * 2) + 2;
+          for (let j = 0; j < planetCount; j++) {
+            sun.planets.push({
+              orbitRadius: sun.radius * 3 + 15 + j * 15,
+              angle: Math.random() * Math.PI * 2,
+              speed: (0.005 + Math.random() * 0.01) * (j + 1) * 0.5,
+              radius: 2 + Math.random() * 1,
+              color: `hsl(${Math.random() * 360}, 70%, 70%)`,
+            });
+          }
+        });
       }
 
       function animateStarfield() {
-          requestAnimationFrame(animateStarfield);
-          ctx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
+        requestAnimationFrame(animateStarfield);
+        ctx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
 
-          const mouseX = (mouse.x / window.innerWidth - 0.5) * 2;
-          const mouseY = (mouse.y / window.innerHeight - 0.5) * 2;
+        const mouseX = (mouse.x / window.innerWidth - 0.5) * 2;
+        const mouseY = (mouse.y / window.innerHeight - 0.5) * 2;
 
-          stars.forEach(star => {
-              // Twinkle effect
-              if (star.opacityDirection > 0) {
-                  star.opacity += 0.005;
-                  if (star.opacity >= 1) {
-                      star.opacityDirection = -1;
-                  }
-              } else {
-                  star.opacity -= 0.005;
-                  if (star.opacity <= 0.4) {
-                      star.opacityDirection = 1;
-                  }
-              }
+        stars.forEach((star) => {
+          if (star.opacityDirection > 0) {
+            star.opacity += 0.005;
+            if (star.opacity >= 1) {
+              star.opacityDirection = -1;
+            }
+          } else {
+            star.opacity -= 0.005;
+            if (star.opacity <= 0.4) {
+              star.opacityDirection = 1;
+            }
+          }
 
-              // Parallax
-              const moveX = mouseX * 40 * star.depth;
-              const moveY = mouseY * 40 * star.depth;
+          const moveX = mouseX * 40 * star.depth;
+          const moveY = mouseY * 40 * star.depth;
 
-              // Hover effect
-              const dx = mouse.x - (star.x + moveX);
-              const dy = mouse.y - (star.y + moveY);
-              const distance = Math.sqrt(dx * dx + dy * dy);
+          const dx = mouse.x - (star.x + moveX);
+          const dy = mouse.y - (star.y + moveY);
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-              if (distance < star.radius * 3) {
-                   star.radius = star.originalRadius * 3;
-              } else {
-                   star.radius = star.originalRadius;
-              }
+          if (distance < star.radius * 3) {
+            star.radius = star.originalRadius * 3;
+          } else {
+            star.radius = star.originalRadius;
+          }
 
-              // Draw star
+          ctx.beginPath();
+          ctx.arc(star.x + moveX, star.y + moveY, star.radius, 0, Math.PI * 2);
+          const starColor =
+            star.color.substring(0, star.color.lastIndexOf(",")) +
+            `, ${star.opacity})`;
+          ctx.fillStyle = starColor;
+          ctx.shadowColor = star.color;
+          ctx.shadowBlur = star.radius * 2;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          if (star.isSun) {
+            const sunX = star.x + moveX;
+            const sunY = star.y + moveY;
+
+            star.planets.forEach((planet) => {
+              planet.angle += planet.speed;
+
+              const planetX =
+                sunX + planet.orbitRadius * Math.cos(planet.angle);
+              const planetY =
+                sunY + planet.orbitRadius * Math.sin(planet.angle);
+
               ctx.beginPath();
-              ctx.arc(star.x + moveX, star.y + moveY, star.radius, 0, Math.PI * 2);
-              const starColor = star.color.substring(0, star.color.lastIndexOf(',')) + `, ${star.opacity})`;
-              ctx.fillStyle = starColor;
-              ctx.shadowColor = star.color;
-              ctx.shadowBlur = star.radius * 2;
+              ctx.arc(sunX, sunY, planet.orbitRadius, 0, Math.PI * 2);
+              ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+              ctx.stroke();
+
+              ctx.beginPath();
+              ctx.arc(planetX, planetY, planet.radius, 0, Math.PI * 2);
+              ctx.fillStyle = planet.color;
               ctx.fill();
-              ctx.shadowBlur = 0;
+            });
+          }
+        });
 
-              // Draw planets if it's a sun
-              if (star.isSun) {
-                  const sunX = star.x + moveX;
-                  const sunY = star.y + moveY;
-
-                  star.planets.forEach(planet => {
-                      planet.angle += planet.speed;
-                      
-                      const planetX = sunX + planet.orbitRadius * Math.cos(planet.angle);
-                      const planetY = sunY + planet.orbitRadius * Math.sin(planet.angle);
-
-                      // Draw orbit path
-                      ctx.beginPath();
-                      ctx.arc(sunX, sunY, planet.orbitRadius, 0, Math.PI * 2);
-                      ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
-                      ctx.stroke();
-
-                      // Draw planet
-                      ctx.beginPath();
-                      ctx.arc(planetX, planetY, planet.radius, 0, Math.PI * 2);
-                      ctx.fillStyle = planet.color;
-                      ctx.fill();
-                  });
-              }
-          });
-
-          nebulas.forEach((nebula, index) => {
-              const depth = (index + 1) * 0.3;
-              const moveX = mouseX * 60 * depth;
-              const moveY = mouseY * 60 * depth;
-              nebula.style.transform = `translate(${moveX}px, ${moveY}px)`;
-          });
+        nebulas.forEach((nebula, index) => {
+          const depth = (index + 1) * 0.3;
+          const moveX = mouseX * 60 * depth;
+          const moveY = mouseY * 60 * depth;
+          nebula.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
       }
 
-      window.addEventListener('resize', initStarfield);
+      window.addEventListener("resize", initStarfield);
       document.addEventListener("mousemove", (e) => {
-          mouse.x = e.clientX;
-          mouse.y = e.clientY;
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
       });
 
-      starfieldCanvas.addEventListener('click', (e) => {
-          const clickX = e.clientX;
-          const clickY = e.clientY;
+      starfieldCanvas.addEventListener("click", (e) => {
+        const clickX = e.clientX;
+        const clickY = e.clientY;
 
-          const mouseX = (clickX / window.innerWidth - 0.5) * 2;
-          const mouseY = (clickY / window.innerHeight - 0.5) * 2;
+        const mouseX = (clickX / window.innerWidth - 0.5) * 2;
+        const mouseY = (clickY / window.innerHeight - 0.5) * 2;
 
-          let clickedOnStar = false;
-          stars.forEach(star => {
-              if (clickedOnStar) return;
+        let clickedOnStar = false;
+        stars.forEach((star) => {
+          if (clickedOnStar) return;
 
-              const moveX = mouseX * 40 * star.depth;
-              const moveY = mouseY * 40 * star.depth;
+          const moveX = mouseX * 40 * star.depth;
+          const moveY = mouseY * 40 * star.depth;
 
-              const dx = clickX - (star.x + moveX);
-              const dy = clickY - (star.y + moveY);
-              const distance = Math.sqrt(dx * dx + dy * dy);
+          const dx = clickX - (star.x + moveX);
+          const dy = clickY - (star.y + moveY);
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-              if (distance < star.radius) {
-                  const starClickSound = document.getElementById("starClickSound");
-                  starClickSound.currentTime = 0;
-                  starClickSound.play().catch(() => {});
-                  clickedOnStar = true;
-                  
-                  // Visual feedback for the click
-                  star.opacity = 1;
-              }
-          });
+          if (distance < star.radius) {
+            const starClickSound = document.getElementById("starClickSound");
+            starClickSound.currentTime = 0;
+            starClickSound.play().catch(() => {});
+            clickedOnStar = true;
+
+            star.opacity = 1;
+          }
+        });
       });
 
       function createShootingStar() {
@@ -1604,6 +1886,7 @@
         }, 2500);
         localStorage.removeItem("messageDraft");
       }
+
       function setupMessageListener() {
         const messagesDisplay = document.getElementById("messagesDisplay");
         const q = query(messagesCollection, orderBy("createdAt", "desc"));
@@ -1632,9 +1915,20 @@
 
               const messageDiv = document.createElement("div");
               messageDiv.className = "single-message";
+
+              let imagesHTML = "";
+              if (msgData.imageUrls && msgData.imageUrls.length > 0) {
+                imagesHTML = '<div class="message-images">';
+                msgData.imageUrls.forEach((url) => {
+                  imagesHTML += `<img src="${url}" class="message-image" onclick="openImageModal('${url}')" alt="Message image" />`;
+                });
+                imagesHTML += "</div>";
+              }
+
               messageDiv.innerHTML = `
       <div class="message-timestamp">${displayTimestamp}</div>
       <div class="message-content">${msgData.message}</div>
+      ${imagesHTML}
       <button class="edit-button" title="Edit message">
         <svg viewBox="0 0 24 24">
           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -1652,16 +1946,16 @@
                 enterEditMode(messageDiv, docId, msgData.message);
               });
 
-              // Populate compact reaction summary (only show emojis with count > 0)
-              const summaryContainer = messageDiv.querySelector('.reaction-summary');
+              const summaryContainer =
+                messageDiv.querySelector(".reaction-summary");
               function renderSummary(reactions) {
-                summaryContainer.innerHTML = '';
+                summaryContainer.innerHTML = "";
                 if (!reactions) return;
                 Object.keys(reactions).forEach((key) => {
                   const count = reactions[key] || 0;
                   if (count > 0) {
-                    const span = document.createElement('div');
-                    span.className = 'summary-reaction';
+                    const span = document.createElement("div");
+                    span.className = "summary-reaction";
                     span.innerHTML = `${key} <strong style="margin-left:6px;color:#b8e6ff">${count}</strong>`;
                     summaryContainer.appendChild(span);
                   }
@@ -1670,73 +1964,74 @@
 
               renderSummary(msgData.reactions);
 
-              // Reaction overlay behavior (WhatsApp/Instagram style)
-              const trigger = messageDiv.querySelector('.reaction-trigger');
+              const trigger = messageDiv.querySelector(".reaction-trigger");
               let overlayEl = null;
-              const EMOJIS = ['❤️', '😆', '💌', '😬', '🥹'];
+              const EMOJIS = ["❤️", "😆", "💌", "😬", "🥹"];
 
               function closeOverlay() {
                 if (overlayEl && overlayEl.parentNode) overlayEl.remove();
                 overlayEl = null;
-                document.removeEventListener('click', outsideClickListener);
+                document.removeEventListener("click", outsideClickListener);
               }
 
               function outsideClickListener(e) {
                 if (!overlayEl) return;
-                if (!overlayEl.contains(e.target) && !trigger.contains(e.target)) closeOverlay();
+                if (
+                  !overlayEl.contains(e.target) &&
+                  !trigger.contains(e.target)
+                )
+                  closeOverlay();
               }
 
-              trigger.addEventListener('click', (e) => {
+              trigger.addEventListener("click", (e) => {
                 e.stopPropagation();
-                // toggle
                 if (overlayEl) return closeOverlay();
 
-                overlayEl = document.createElement('div');
-                overlayEl.className = 'reaction-overlay';
+                overlayEl = document.createElement("div");
+                overlayEl.className = "reaction-overlay";
 
                 EMOJIS.forEach((emoji) => {
-                  const btn = document.createElement('div');
-                  btn.className = 'overlay-emoji';
+                  const btn = document.createElement("div");
+                  btn.className = "overlay-emoji";
                   btn.textContent = emoji;
-                  btn.addEventListener('click', async (ev) => {
+                  btn.addEventListener("click", async (ev) => {
                     ev.stopPropagation();
-                    const messageDoc = doc(db, 'drishti_messages', docId);
+                    const messageDoc = doc(db, "drishti_messages", docId);
                     try {
-                      // enforce single reaction per USER_ID
-                      const prior = (msgData.reactionsByUser && msgData.reactionsByUser[USER_ID]) || null;
+                      const prior =
+                        (msgData.reactionsByUser &&
+                          msgData.reactionsByUser[USER_ID]) ||
+                        null;
                       const updates = {};
                       if (prior === emoji) {
-                        // user clicked same emoji -> remove reaction
-                        updates['reactions.' + emoji] = increment(-1);
-                        updates['reactionsByUser.' + USER_ID] = deleteField();
+                        updates["reactions." + emoji] = increment(-1);
+                        updates["reactionsByUser." + USER_ID] = deleteField();
                       } else if (prior) {
-                        // user had another reaction -> switch
-                        updates['reactions.' + emoji] = increment(1);
-                        updates['reactions.' + prior] = increment(-1);
-                        updates['reactionsByUser.' + USER_ID] = emoji;
+                        updates["reactions." + emoji] = increment(1);
+                        updates["reactions." + prior] = increment(-1);
+                        updates["reactionsByUser." + USER_ID] = emoji;
                       } else {
-                        // new reaction
-                        updates['reactions.' + emoji] = increment(1);
-                        updates['reactionsByUser.' + USER_ID] = emoji;
+                        updates["reactions." + emoji] = increment(1);
+                        updates["reactionsByUser." + USER_ID] = emoji;
                       }
 
-                      triggerHaptic('light');
+                      triggerHaptic("light");
                       await updateDoc(messageDoc, updates);
                       closeOverlay();
                     } catch (err) {
-                      console.error('Error updating reaction:', err);
+                      console.error("Error updating reaction:", err);
                     }
                   });
                   overlayEl.appendChild(btn);
                 });
 
                 messageDiv.appendChild(overlayEl);
-                // close when clicking elsewhere
-                setTimeout(() => document.addEventListener('click', outsideClickListener), 10);
+                setTimeout(
+                  () =>
+                    document.addEventListener("click", outsideClickListener),
+                  10
+                );
               });
-
-              // Keep the UI updated when snapshot provides new data
-              // (onSnapshot re-renders messages, so renderSummary will run again)
 
               messagesDisplay.appendChild(messageDiv);
             });
@@ -1748,37 +2043,82 @@
         );
       }
 
+      async function uploadImages() {
+        const uploadingIndicator =
+          document.getElementById("uploadingIndicator");
+        uploadingIndicator.classList.add("show");
+
+        const imageUrls = [];
+
+        try {
+          for (const img of selectedImages) {
+            const timestamp = Date.now();
+            const randomStr = Math.random().toString(36).substring(2, 9);
+            const fileName = `${timestamp}_${randomStr}_${img.file.name}`;
+            const storageRef = ref(storage, `message_images/${fileName}`);
+
+            await uploadBytes(storageRef, img.file);
+            const downloadUrl = await getDownloadURL(storageRef);
+            imageUrls.push(downloadUrl);
+          }
+
+          uploadingIndicator.classList.remove("show");
+          return imageUrls;
+        } catch (error) {
+          uploadingIndicator.classList.remove("show");
+          console.error("Error uploading images:", error);
+          throw error;
+        }
+      }
+
       async function sendMessage() {
         const input = document.getElementById("messageInput");
         const message = input.value.trim();
+        const imagePreviewContainer = document.getElementById(
+          "imagePreviewContainer"
+        );
+
         triggerHaptic("success");
-        if (!message) {
+
+        if (!message && selectedImages.length === 0) {
           showNotification(
-            "⚠️ Please write a message first!",
+            "⚠️ Please write a message or add images!",
             "rgba(255, 165, 0, 0.95)"
           );
           return;
         }
 
         try {
-            const messageData = {
-              message: message,
-              createdAt: serverTimestamp(),
-              reactions: {},
-              reactionsByUser: {},
-            };
+          let imageUrls = [];
+
+          if (selectedImages.length > 0) {
+            imageUrls = await uploadImages();
+          }
+
+          const messageData = {
+            message: message || "",
+            createdAt: serverTimestamp(),
+            reactions: {},
+            reactionsByUser: {},
+            imageUrls: imageUrls,
+          };
 
           await addDoc(messagesCollection, messageData);
+
           document
             .getElementById("sendSound")
             .play()
             .catch(() => {});
+
           showNotification(
             "✨ Message sent successfully! ✨",
             "rgba(5, 196, 107, 0.95)"
           );
 
           input.value = "";
+          selectedImages = [];
+          imagePreviewContainer.innerHTML = "";
+
           createSparkles(15);
         } catch (error) {
           console.error("Error sending message:", error);
