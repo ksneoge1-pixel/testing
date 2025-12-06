@@ -152,7 +152,6 @@
         );
         animation: pulseNebula 10s ease-in-out infinite reverse;
       }
-
       .nebula-3 {
         top: 50%;
         left: 50%;
@@ -220,7 +219,7 @@
         height: 60px;
         color: #ffffff;
         font-size: 1.3em;
-        cursor: pointer;  
+        cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 5px 25px rgba(100, 200, 255, 0.35);
         z-index: 100;
@@ -245,16 +244,20 @@
         gap: 12px;
         align-items: center;
         background: rgba(10, 20, 40, 0.7);
-        border: 1px solid rgba(168,94,234,0.45);
+        border: 1px solid rgba(168, 94, 234, 0.45);
         padding: 8px 16px;
         border-radius: 24px;
         z-index: 110;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
       }
 
       .encourage-button {
-        background: linear-gradient(135deg, rgba(168,94,234,0.6), rgba(100,200,255,0.6));
-        border: 1px solid rgba(168,94,234,0.8);
+        background: linear-gradient(
+          135deg,
+          rgba(168, 94, 234, 0.6),
+          rgba(100, 200, 255, 0.6)
+        );
+        border: 1px solid rgba(168, 94, 234, 0.8);
         color: #fff;
         padding: 8px 14px;
         border-radius: 18px;
@@ -263,12 +266,14 @@
         font-size: 0.95em;
       }
 
-      .encourage-button:hover { transform: translateY(-3px); }
+      .encourage-button:hover {
+        transform: translateY(-3px);
+      }
 
       .encourage-text {
         color: #fff;
         font-weight: 700;
-        text-shadow: 0 0 8px rgba(100,200,255,0.12);
+        text-shadow: 0 0 8px rgba(100, 200, 255, 0.12);
         white-space: nowrap;
         font-size: 0.98em;
       }
@@ -1297,11 +1302,42 @@
       <span id="minimizeIcon">✖</span>
     </button>
 
-    <button class="music-toggle" id="musicToggleBtn" title="Play / Pause music">▶️</button>
+    <button class="music-toggle" id="musicToggleBtn" title="Play / Pause music">
+      ▶️
+    </button>
 
     <div class="top-play-bar" id="topPlayBar">
-      <button id="encourageBtn" class="encourage-button" title="Play main audio">🎧 Play</button>
-      <span class="encourage-text">Best Of Luck drishti!!! YOU'VE GOT THISSS!!!!!</span>
+      <button
+        id="encourageBtn"
+        class="encourage-button"
+        title="Play main audio"
+      >
+        🎧 Play
+      </button>
+      <span class="encourage-text"
+        >Best Of Luck drishti!!! YOU'VE GOT THISSS!!!!!</span
+      >
+      <div
+        style="
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin-left: 12px;
+        "
+      >
+        <input
+          id="mainTimeline"
+          type="range"
+          min="0"
+          max="0"
+          value="0"
+          step="0.1"
+          style="width: 280px"
+        />
+        <span id="mainTimeCurrent" style="color: white;">0:00</span>
+        <span style="color:white">/</span>
+        <span id="mainTimeDuration" style="color: white;">0:00</span>
+      </div>
     </div>
 
     <div class="calm-message" id="calmMessage">
@@ -2238,7 +2274,9 @@
       function updateMusicButton() {
         if (!ambientSoundEl) return;
         musicToggleBtn.textContent = ambientSoundEl.paused ? "▶️" : "⏸️";
-        musicToggleBtn.title = ambientSoundEl.paused ? "Play music" : "Pause music";
+        musicToggleBtn.title = ambientSoundEl.paused
+          ? "Play music"
+          : "Pause music";
       }
 
       musicToggleBtn.addEventListener("click", (e) => {
@@ -2266,33 +2304,75 @@
       updateMusicButton();
 
       // Encourage button: play/pause main audio
-      const encourageBtn = document.getElementById('encourageBtn');
-      const mainAudio = document.getElementById('mainAudio');
+      const encourageBtn = document.getElementById("encourageBtn");
+      const mainAudio = document.getElementById("mainAudio");
 
       function updateEncourageButton() {
         if (!mainAudio || !encourageBtn) return;
-        encourageBtn.textContent = mainAudio.paused ? '🎧 Play' : '⏸️ Pause';
+        encourageBtn.textContent = mainAudio.paused ? "🎧 Play" : "⏸️ Pause";
       }
 
       if (encourageBtn && mainAudio) {
-        encourageBtn.addEventListener('click', (e) => {
+        encourageBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           try {
             if (mainAudio.paused) {
               mainAudio.currentTime = 0;
               mainAudio.volume = 0.85;
-              mainAudio.play().catch((err) => console.error('Play failed', err));
+              mainAudio
+                .play()
+                .catch((err) => console.error("Play failed", err));
             } else {
               mainAudio.pause();
             }
           } catch (err) {
-            console.error('Error toggling main audio:', err);
+            console.error("Error toggling main audio:", err);
           }
           updateEncourageButton();
         });
+        // Timeline / scrubber for main audio
+        const mainTimeline = document.getElementById("mainTimeline");
+        const mainTimeCurrent = document.getElementById("mainTimeCurrent");
+        const mainTimeDuration = document.getElementById("mainTimeDuration");
 
-        mainAudio.addEventListener('play', updateEncourageButton);
-        mainAudio.addEventListener('pause', updateEncourageButton);
+        function formatTime(seconds) {
+          if (!isFinite(seconds)) return "0:00";
+          const s = Math.floor(seconds % 60)
+            .toString()
+            .padStart(2, "0");
+          const m = Math.floor(seconds / 60);
+          return `${m}:${s}`;
+        }
+
+        if (mainAudio && mainTimeline) {
+          // Update duration when metadata loaded
+          mainAudio.addEventListener("loadedmetadata", () => {
+            mainTimeline.max = mainAudio.duration;
+            mainTimeDuration.textContent = formatTime(mainAudio.duration);
+          });
+
+          // Update timeline as audio plays
+          mainAudio.addEventListener("timeupdate", () => {
+            if (!isNaN(mainAudio.duration)) {
+              mainTimeline.value = mainAudio.currentTime;
+              mainTimeCurrent.textContent = formatTime(mainAudio.currentTime);
+            }
+          });
+
+          // Seek when user drags the range input
+          let seeking = false;
+          mainTimeline.addEventListener("input", (e) => {
+            seeking = true;
+            mainTimeCurrent.textContent = formatTime(Number(e.target.value));
+          });
+          mainTimeline.addEventListener("change", (e) => {
+            mainAudio.currentTime = Number(e.target.value);
+            seeking = false;
+          });
+        }
+
+        mainAudio.addEventListener("play", updateEncourageButton);
+        mainAudio.addEventListener("pause", updateEncourageButton);
       }
     </script>
   </body>
