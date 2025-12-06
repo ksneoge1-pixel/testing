@@ -208,6 +208,71 @@
         transform: scale(0.9) rotate(90deg);
       }
 
+      .music-toggle {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        background: rgba(100, 200, 255, 0.4);
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(100, 200, 255, 0.6);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        color: #ffffff;
+        font-size: 1.3em;
+        cursor: pointer;  
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 25px rgba(100, 200, 255, 0.35);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .music-toggle:hover {
+        transform: scale(1.08);
+        box-shadow: 0 10px 40px rgba(100, 200, 255, 0.5);
+        background: rgba(100, 200, 255, 0.55);
+      }
+
+      /* Top centered encouragement bar */
+      .top-play-bar {
+        position: fixed;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        background: rgba(10, 20, 40, 0.7);
+        border: 1px solid rgba(168,94,234,0.45);
+        padding: 8px 16px;
+        border-radius: 24px;
+        z-index: 110;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      }
+
+      .encourage-button {
+        background: linear-gradient(135deg, rgba(168,94,234,0.6), rgba(100,200,255,0.6));
+        border: 1px solid rgba(168,94,234,0.8);
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 18px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.95em;
+      }
+
+      .encourage-button:hover { transform: translateY(-3px); }
+
+      .encourage-text {
+        color: #fff;
+        font-weight: 700;
+        text-shadow: 0 0 8px rgba(100,200,255,0.12);
+        white-space: nowrap;
+        font-size: 0.98em;
+      }
+
       .container {
         position: relative;
         z-index: 10;
@@ -1194,6 +1259,10 @@
     <audio id="ambientSound" loop preload="metadata">
       <source src="./src/Cry.mp3" type="audio/mpeg" />
     </audio>
+    <audio id="mainAudio" preload="none">
+      <source src="./src/main.mp3" type="audio/mpeg" />
+      <source src="./src/main.mps" type="audio/mpeg" />
+    </audio>
   </head>
   <body>
     <!-- Password Modal -->
@@ -1227,6 +1296,13 @@
     <button class="minimize-button" id="minimizeBtn" title="Toggle chat">
       <span id="minimizeIcon">✖</span>
     </button>
+
+    <button class="music-toggle" id="musicToggleBtn" title="Play / Pause music">▶️</button>
+
+    <div class="top-play-bar" id="topPlayBar">
+      <button id="encourageBtn" class="encourage-button" title="Play main audio">🎧 Play</button>
+      <span class="encourage-text">Best Of Luck drishti!!! YOU'VE GOT THISSS!!!!!</span>
+    </div>
 
     <div class="calm-message" id="calmMessage">
       Let it calm your nerves and bring peace to your heart and mind, your
@@ -1459,16 +1535,6 @@
           document.body.appendChild(indicator);
           setTimeout(() => indicator.remove(), 1500);
         }
-
-        document.body.addEventListener(
-          "click",
-          () => {
-            const ambientSound = document.getElementById("ambientSound");
-            ambientSound.volume = 0.5;
-            ambientSound.play().catch(() => {});
-          },
-          { once: true }
-        );
       }
 
       function setupImageHandling() {
@@ -2164,6 +2230,70 @@
           isMinimized = false;
         }
       });
+
+      // Music play/pause toggle
+      const musicToggleBtn = document.getElementById("musicToggleBtn");
+      const ambientSoundEl = document.getElementById("ambientSound");
+
+      function updateMusicButton() {
+        if (!ambientSoundEl) return;
+        musicToggleBtn.textContent = ambientSoundEl.paused ? "▶️" : "⏸️";
+        musicToggleBtn.title = ambientSoundEl.paused ? "Play music" : "Pause music";
+      }
+
+      musicToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (!ambientSoundEl) return;
+        try {
+          if (ambientSoundEl.paused) {
+            ambientSoundEl.volume = 0.5;
+            ambientSoundEl.play().catch(() => {});
+          } else {
+            ambientSoundEl.pause();
+          }
+        } catch (err) {
+          console.error("Error toggling ambient sound:", err);
+        }
+        updateMusicButton();
+      });
+
+      if (ambientSoundEl) {
+        ambientSoundEl.addEventListener("play", updateMusicButton);
+        ambientSoundEl.addEventListener("pause", updateMusicButton);
+      }
+
+      // Initialize button state
+      updateMusicButton();
+
+      // Encourage button: play/pause main audio
+      const encourageBtn = document.getElementById('encourageBtn');
+      const mainAudio = document.getElementById('mainAudio');
+
+      function updateEncourageButton() {
+        if (!mainAudio || !encourageBtn) return;
+        encourageBtn.textContent = mainAudio.paused ? '🎧 Play' : '⏸️ Pause';
+      }
+
+      if (encourageBtn && mainAudio) {
+        encourageBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          try {
+            if (mainAudio.paused) {
+              mainAudio.currentTime = 0;
+              mainAudio.volume = 0.85;
+              mainAudio.play().catch((err) => console.error('Play failed', err));
+            } else {
+              mainAudio.pause();
+            }
+          } catch (err) {
+            console.error('Error toggling main audio:', err);
+          }
+          updateEncourageButton();
+        });
+
+        mainAudio.addEventListener('play', updateEncourageButton);
+        mainAudio.addEventListener('pause', updateEncourageButton);
+      }
     </script>
   </body>
 </html>
