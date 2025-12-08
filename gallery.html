@@ -429,7 +429,7 @@
     </div>
 
     <!-- Content -->
-    <div class="container">
+    <div class="container"> 
       <div class="gallery-header">
         <a href="test.html" class="back-button">← Back to Chat</a>
         <h1>✨ Welcome, Your Majesty.. ✨</h1>
@@ -447,7 +447,131 @@
       </div>
     </div>
 
+    <!-- Confetti Container -->
+    <div id="confetti-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden;"></div>
+
+    <style>
+      @keyframes confetti-fall {
+        0% {
+          opacity: 1;
+          transform: translateY(0) rotateZ(0deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(100vh) rotateZ(720deg);
+        }
+      }
+    </style>
+
     <script>
+      // Confetti animation
+      function createConfetti() {
+        const confettiContainer = document.getElementById("confetti-container");
+        const colors = [
+          "#FF1744", // Red
+          "#F50057", // Pink
+          "#D500F9", // Purple
+          "#651FFF", // Deep Blue
+          "#2979F3", // Blue
+          "#00B0FF", // Light Blue
+          "#00E5FF", // Cyan
+          "#1DE9B6", // Teal
+          "#00E676", // Green
+          "#76FF03", // Light Green
+          "#FFEA00", // Yellow
+          "#FFC400", // Amber
+          "#FF9100", // Orange
+          "#FF3D00", // Deep Orange
+          "#FFD600", // Gold
+          "#FF6E40", // Orange Red
+        ];
+
+        let isAddingConfetti = true;
+        let confettiCounter = 0;
+
+        // Add confetti continuously for 3 seconds
+        const addConfettiInterval = setInterval(() => {
+          if (!isAddingConfetti) {
+            clearInterval(addConfettiInterval);
+            return;
+          }
+
+          // Add 5 pieces per frame for continuous effect
+          for (let j = 0; j < 5; j++) {
+            const confetti = document.createElement("div");
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const size = Math.random() * 8 + 4; // 4-12px
+            const length = Math.random() * 15 + 10; // 10-25px length
+            const startX = Math.random() * window.innerWidth;
+            const duration = Math.random() * 1500 + 2500; // 2.5-4s fall duration
+            const swayDistance = Math.random() * 100 + 50; // Sway amount
+            const swayDirection = Math.random() > 0.5 ? 1 : -1;
+
+            confetti.style.position = "fixed";
+            confetti.style.width = size + "px";
+            confetti.style.height = length + "px";
+            confetti.style.backgroundColor = color;
+            confetti.style.left = startX + "px";
+            confetti.style.top = "-30px";
+            confetti.style.borderRadius = "2px";
+            confetti.style.opacity = "0.8";
+            confetti.style.zIndex = "9999";
+            confetti.style.pointerEvents = "none";
+            confetti.style.boxShadow = `0 0 2px ${color}`;
+
+            // Create unique animation for each piece
+            const animationName = `fall-${confettiCounter}-${Date.now()}`;
+            confettiCounter++;
+
+            const keyframes = `
+              @keyframes ${animationName} {
+                0% {
+                  transform: translateY(0) translateX(0) rotateZ(0deg);
+                  opacity: 1;
+                }
+                25% {
+                  transform: translateY(25vh) translateX(${swayDistance * swayDirection}px) rotateZ(180deg);
+                }
+                50% {
+                  transform: translateY(50vh) translateX(0) rotateZ(360deg);
+                }
+                75% {
+                  transform: translateY(75vh) translateX(${-swayDistance * swayDirection}px) rotateZ(540deg);
+                }
+                100% {
+                  transform: translateY(105vh) translateX(0) rotateZ(720deg);
+                  opacity: 0;
+                }
+              }
+            `;
+
+            const style = document.createElement("style");
+            style.textContent = keyframes;
+            document.head.appendChild(style);
+
+            confetti.style.animation = `${animationName} ${duration}ms ease-in forwards`;
+            confettiContainer.appendChild(confetti);
+
+            // Remove element after animation completes
+            setTimeout(() => {
+              confetti.remove();
+            }, duration);
+          }
+        }, 50); // Add pieces every 50ms for smooth continuous flow
+
+        // Stop adding new pieces after 3 seconds
+        setTimeout(() => {
+          isAddingConfetti = false;
+        }, 3000);
+      }
+
+      // Trigger confetti when DOM is ready
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", createConfetti);
+      } else {
+        createConfetti();
+      }
+
       // Generate floating particles
       function createParticles() {
         const background = document.querySelector(".aurora-background");
