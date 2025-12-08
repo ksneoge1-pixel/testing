@@ -176,7 +176,72 @@
         }
       }
 
-      .minimize-button {
+      /* Sidebar */
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 280px;
+        height: 100vh;
+        background: rgba(10, 20, 40, 0.85);
+        backdrop-filter: blur(30px);
+        border-right: 2px solid rgba(168, 94, 234, 0.3);
+        z-index: 105;
+        transform: translateX(-100%);
+        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 80px 20px 20px 20px;
+        box-shadow: 8px 0 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        list-style: none;
+      }
+
+      .sidebar-menu li {
+        width: 100%;
+      }
+
+      .sidebar-menu button {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(168, 94, 234, 0.25);
+        border: 1.5px solid rgba(168, 94, 234, 0.5);
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 1.05em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      .sidebar-menu button:hover {
+        background: rgba(168, 94, 234, 0.45);
+        border-color: rgba(168, 94, 234, 0.8);
+        transform: translateX(8px);
+        box-shadow: 0 5px 20px rgba(168, 94, 234, 0.3);
+      }
+
+      .sidebar-menu button:active {
+        transform: translateX(6px) scale(0.98);
+      }
+
+      /* Hamburger menu button */
+      .hamburger-btn {
         position: fixed;
         top: 30px;
         left: 30px;
@@ -191,20 +256,55 @@
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         box-shadow: 0 5px 25px rgba(168, 94, 234, 0.5);
-        z-index: 100;
+        z-index: 110;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 0;
       }
 
-      .minimize-button:hover {
-        transform: scale(1.15) rotate(90deg);
+      .hamburger-btn:hover {
+        transform: scale(1.15);
         box-shadow: 0 10px 40px rgba(168, 94, 234, 0.7);
         background: rgba(168, 94, 234, 0.7);
       }
 
+      .hamburger-btn:active {
+        transform: scale(0.9);
+      }
+
+      .minimize-button {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(168, 94, 234, 0.25);
+        border: 1.5px solid rgba(168, 94, 234, 0.5);
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 1.05em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: "Montserrat", sans-serif;
+        position: relative;
+        top: auto;
+        left: auto;
+        box-shadow: none;
+        border-radius: 12px;
+      }
+
+      .minimize-button:hover {
+        background: rgba(168, 94, 234, 0.45);
+        border-color: rgba(168, 94, 234, 0.8);
+        transform: translateX(8px);
+        box-shadow: 0 5px 20px rgba(168, 94, 234, 0.3);
+      }
+
       .minimize-button:active {
-        transform: scale(0.9) rotate(90deg);
+        transform: translateX(6px) scale(0.98);
       }
 
       .music-toggle {
@@ -1103,12 +1203,17 @@
           padding: 15px 25px;
         }
 
-        .minimize-button {
+        .hamburger-btn {
           top: 20px;
           left: 20px;
           width: 55px;
           height: 55px;
           font-size: 1.3em;
+        }
+
+        .sidebar {
+          width: 250px;
+          padding: 70px 15px 15px 15px;
         }
 
         .calm-message {
@@ -1331,14 +1436,29 @@
       <div class="nebula nebula-3"></div>
     </div>
 
-    <button class="minimize-button" id="minimizeBtn" title="Toggle chat">
-      <span id="minimizeIcon">✖</span>
-    </button>
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-btn" id="hamburgerBtn" title="Menu">☰</button>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <ul class="sidebar-menu">
+        <li>
+          <button id="minimizeBtn" title="Toggle chat">
+            <span id="minimizeIcon">✨</span>
+            <span>Admire the Galaxy :)</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="window.location.href='gallery.html'" title="View Gallery">
+            🖼️ Gallery
+          </button>
+        </li>
+      </ul>
+    </nav>
 
     <button class="music-toggle" id="musicToggleBtn" title="Play / Pause music">
       ▶️
     </button>
-
     <div class="top-play-bar" id="topPlayBar">
       <button
         id="encourageBtn"
@@ -1367,9 +1487,9 @@
           step="0.1"
           style="width: 280px"
         />
-        <span id="mainTimeCurrent" style="color: white;">0:00</span>
-        <span style="color:white">/</span>
-        <span id="mainTimeDuration" style="color: white;">0:00</span>
+        <span id="mainTimeCurrent" style="color: white">0:00</span>
+        <span style="color: white">/</span>
+        <span id="mainTimeDuration" style="color: white">0:00</span>
       </div>
     </div>
 
@@ -2277,6 +2397,35 @@
           }
         });
 
+      // Hamburger Menu Toggle
+      const hamburgerBtn = document.getElementById("hamburgerBtn");
+      const sidebar = document.getElementById("sidebar");
+
+      hamburgerBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
+
+      // Close sidebar when a menu item is clicked
+      const sidebarMenuButtons = sidebar.querySelectorAll(".sidebar-menu button");
+      sidebarMenuButtons.forEach((button) => {
+        if (button.id !== "minimizeBtn") {
+          button.addEventListener("click", () => {
+            sidebar.classList.remove("open");
+          });
+        }
+      });
+
+      // Close sidebar when clicking outside
+      document.addEventListener("click", (e) => {
+        if (
+          !sidebar.contains(e.target) &&
+          !hamburgerBtn.contains(e.target) &&
+          sidebar.classList.contains("open")
+        ) {
+          sidebar.classList.remove("open");
+        }
+      });
+
       const minimizeBtnElement = document.getElementById("minimizeBtn");
       const chatContainerElement = document.getElementById("chatContainer");
       const calmMessage = document.getElementById("calmMessage");
@@ -2410,3 +2559,4 @@
     </script>
   </body>
 </html>
+`
