@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome, Your Majesty..</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎆</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        overflow-x: hidden;
+        cursor: default;
+        background: #000a0f;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Green Aurora Background */
+      .aurora-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: radial-gradient(
+          ellipse at bottom,
+          #001a0f 0%,
+          #000a0f 50%,
+          #000000 100%
+        );
+        overflow: hidden;
+      }
+
+      /* Aurora waves animation - Multiple layers for depth */
+      .aurora-wave {
+        position: absolute;
+        width: 200%;
+        height: 150%;
+        opacity: 0.8;
+        filter: blur(60px);
+        animation: auroraFlow 20s ease-in-out infinite;
+        top: -25%;
+        left: -50%;
+      }
+
+      .aurora-wave:nth-child(1) {
+        background: radial-gradient(
+          ellipse at 30% 50%,
+          rgba(34, 197, 94, 0.4) 0%,
+          rgba(16, 185, 129, 0.3) 25%,
+          transparent 50%
+        );
+        animation: auroraFlow 25s ease-in-out infinite;
+      }
+
+      .aurora-wave:nth-child(2) {
+        background: radial-gradient(
+          ellipse at 60% 40%,
+          rgba(16, 185, 129, 0.5) 0%,
+          rgba(34, 197, 94, 0.35) 25%,
+          transparent 50%
+        );
+        animation: auroraFlow 30s ease-in-out infinite reverse;
+        animation-delay: -5s;
+      }
+
+      .aurora-wave:nth-child(3) {
+        background: radial-gradient(
+          ellipse at 80% 60%,
+          rgba(52, 211, 153, 0.45) 0%,
+          rgba(34, 197, 94, 0.3) 25%,
+          transparent 50%
+        );
+        animation: auroraFlow 35s ease-in-out infinite;
+        animation-delay: -10s;
+        filter: blur(80px);
+      }
+
+      .aurora-wave:nth-child(4) {
+        background: radial-gradient(
+          ellipse at 40% 30%,
+          rgba(20, 184, 166, 0.4) 0%,
+          rgba(16, 185, 129, 0.25) 30%,
+          transparent 60%
+        );
+        animation: auroraFlow 28s ease-in-out infinite reverse;
+        animation-delay: -15s;
+        filter: blur(70px);
+      }
+
+      @keyframes auroraFlow {
+        0% {
+          transform: translateX(0) translateY(0) scale(1);
+          opacity: 0.6;
+        }
+        25% {
+          transform: translateX(15%) translateY(-5%) scale(1.1);
+          opacity: 0.8;
+        }
+        50% {
+          transform: translateX(30%) translateY(-10%) scale(1.05);
+          opacity: 0.9;
+        }
+        75% {
+          transform: translateX(15%) translateY(-5%) scale(1.1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateX(0) translateY(0) scale(1);
+          opacity: 0.6;
+        }
+      }
+
+      /* Add a subtle shimmer effect */
+      .aurora-background::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(34, 197, 94, 0.05) 50%,
+          transparent 100%
+        );
+        animation: shimmer 8s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      @keyframes shimmer {
+        0%, 100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      /* Enhanced floating particles for stars */
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: rgba(200, 255, 220, 0.8);
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(200, 255, 220, 0.9);
+        animation: float 25s infinite, twinkle 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) translateX(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-20vh) translateX(80px);
+          opacity: 0;
+        }
+      }
+
+      @keyframes twinkle {
+        0%, 100% {
+          opacity: 0.3;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.3);
+        }
+      }
+
+      /* Content Container */
+      .container {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 1200px;
+        padding: 60px 20px 40px 20px;
+      }
+
+      /* Header */
+      .gallery-header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .back-button {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background: rgba(34, 197, 94, 0.25);
+        border: 1.5px solid rgba(34, 197, 94, 0.6);
+        border-radius: 25px;
+        color: #22c55e;
+        font-size: 0.95em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      .back-button:hover {
+        background: rgba(34, 197, 94, 0.45);
+        border-color: rgba(34, 197, 94, 0.9);
+        transform: translateX(-5px);
+        box-shadow: 0 5px 20px rgba(34, 197, 94, 0.3);
+      }
+
+      .back-button:active {
+        transform: translateX(-3px) scale(0.98);
+      }
+
+      .gallery-header h1 {
+        font-size: 3em;
+        color: #22c55e;
+        text-shadow: 0 0 30px rgba(34, 197, 94, 0.6);
+        margin-bottom: 15px;
+        animation: glow 3s ease-in-out infinite;
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          text-shadow: 0 0 30px rgba(34, 197, 94, 0.6);
+        }
+        50% {
+          text-shadow: 0 0 50px rgba(34, 197, 94, 0.9);
+        }
+      }
+
+      .gallery-header p {
+        color: rgba(34, 197, 94, 0.8);
+        font-size: 1.1em;
+        font-weight: 300;
+      }
+
+      /* Gallery Grid */
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        width: 100%;
+      }
+
+      .gallery-item {
+        position: relative;
+        aspect-ratio: 1;
+        border-radius: 15px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid rgba(34, 197, 94, 0.3);
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 10px 40px rgba(34, 197, 94, 0.2);
+      }
+
+      .gallery-item:hover {
+        transform: scale(1.08) translateY(-10px);
+        border-color: rgba(34, 197, 94, 0.8);
+        box-shadow: 0 20px 60px rgba(34, 197, 94, 0.4);
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+      }
+
+      .gallery-item:hover img {
+        transform: scale(1.1);
+      }
+
+      /* Image Overlay */
+      .gallery-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        font-size: 2.5em;
+      }
+
+      .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+      }
+
+      /* Modal */
+      .image-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .image-modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+      }
+
+      .modal-content img {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 10px;
+        box-shadow: 0 20px 80px rgba(34, 197, 94, 0.4);
+        border: 2px solid rgba(34, 197, 94, 0.5);
+      }
+
+      .modal-close {
+        position: absolute;
+        top: -50px;
+        right: 0;
+        background: rgba(34, 197, 94, 0.3);
+        border: 2px solid rgba(34, 197, 94, 0.6);
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        color: #22c55e;
+        font-size: 1.5em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .modal-close:hover {
+        background: rgba(34, 197, 94, 0.5);
+        transform: scale(1.1);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .gallery-header h1 {
+          font-size: 2em;
+        }
+
+        .gallery-grid {
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 20px;
+          padding: 0 10px;
+        }
+
+        .gallery-item {
+          border-radius: 10px;
+        }
+
+        .modal-close {
+          top: -40px;
+          width: 40px;
+          height: 40px;
+          font-size: 1.2em;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 40px 10px 20px 10px;
+        }
+
+        .gallery-header h1 {
+          font-size: 1.5em;
+          margin-bottom: 10px;
+        }
+
+        .gallery-header p {
+          font-size: 0.95em;
+        }
+
+        .gallery-grid {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          gap: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Aurora Background -->
+    <div class="aurora-background">
+      <div class="aurora-wave"></div>
+      <div class="aurora-wave"></div>
+      <div class="aurora-wave"></div>
+      <div class="aurora-wave"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="container">
+      <div class="gallery-header">
+        <a href="test.html" class="back-button">← Back to Chat</a>
+        <h1>✨ Welcome, Your Majesty.. ✨</h1>
+        <p>A collection of beautiful moments captured in the glow of the aurora</p>
+      </div>
+
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal">
+      <div class="modal-content">
+        <img id="modalImage" src="" alt="Full view" />
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+    </div>
+
+    <script>
+      // Generate floating particles
+      function createParticles() {
+        const background = document.querySelector(".aurora-background");
+        for (let i = 0; i < 50; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+          particle.style.left = Math.random() * 100 + "%";
+          particle.style.top = Math.random() * 100 + "%";
+          particle.style.animationDelay = Math.random() * 25 + "s";
+          particle.style.animationDuration = 20 + Math.random() * 20 + "s";
+          background.appendChild(particle);
+        }
+      }
+
+      createParticles();
+
+      // Gallery images
+      const images = [
+        "src/images/img1.jpg",
+        "src/images/img2.jpg",
+        "src/images/img3.jpg",
+        "src/images/img4.jpg",
+        "src/images/img5.jpg",
+      ];
+
+      // Populate gallery grid
+      const galleryGrid = document.getElementById("galleryGrid");
+      images.forEach((imagePath, index) => {
+        const item = document.createElement("div");
+        item.className = "gallery-item";
+
+        const img = document.createElement("img");
+        img.src = imagePath;
+        img.alt = `Gallery Image ${index + 1}`;
+        img.loading = "lazy";
+
+        const overlay = document.createElement("div");
+        overlay.className = "gallery-overlay";
+
+        item.appendChild(img);
+        item.appendChild(overlay);
+
+        item.addEventListener("click", () => {
+          openModal(imagePath);
+        });
+
+        galleryGrid.appendChild(item);
+      });
+
+      // Modal functionality
+      const imageModal = document.getElementById("imageModal");
+      const modalImage = document.getElementById("modalImage");
+      const modalClose = document.getElementById("modalClose");
+
+      function openModal(imagePath) {
+        modalImage.src = imagePath;
+        imageModal.classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        imageModal.classList.remove("show");
+        document.body.style.overflow = "auto";
+      }
+
+      modalClose.addEventListener("click", closeModal);
+
+      imageModal.addEventListener("click", (e) => {
+        if (e.target === imageModal) {
+          closeModal();
+        }
+      });
+
+      // Close modal on Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html>
